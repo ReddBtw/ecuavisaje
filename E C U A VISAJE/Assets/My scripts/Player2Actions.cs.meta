@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: b44f736c66f478f4f8e10437e050c886
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - Player2: {instanceID: 0}
+  - PunchWoo: {fileID: 8300000, guid: f305214924267724eac84b17443bace5, type: 3}
+  - KickWoo: {fileID: 8300000, guid: 44dedcc257848644db3c59702db43413, type: 3}
+  - HeavyPunchWoo: {instanceID: 0}
+  - HeavyKickWoo: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
