@@ -16,100 +16,94 @@ public class PlayerActions: NetworkBehaviour
     private InputActions inputActions;
     private int side;
     private int side_last;
-    private Player player;
+    private NetworkPlayer player;
 
-    private float timer_base_look_to = 0.4f;
-    private float timer_counter_look_to = 0f;
-
-    void Start(){
-        this.side = 0;
-        this.side_last = -1;
-        this.rb = GetComponent<Rigidbody>();
-        this.animator = GetComponent<Animator>();
-        this.inputActions = new InputActions();
-        this.inputActions.Player.Enable();
-        this.inputActions.Player.Jump.performed += this.jump;
-        this.side = this.side_last;
-
-        
-
-    }
+    #region Server
 
     public override void OnStartServer()
     {
-        this.player = this.connectionToClient.identity.GetComponent<Player>();
-    }
-    public override void OnStartClient()
-    {
-        if(!hasAuthority) return;
-        if(!isClientOnly) return; 
-
-        this.player = NetworkClient.connection.identity.GetComponent<Player>();
-        
-        /*
-        List<Player> players = ((EcuavisajeNetworkManager)NetworkManager.singleton).players;
-
-        int id_self = this.player.id;
-        // todo: remove debug messages
-        Debug.Log($"OnStartClient Client{id_self} {this.player.transform.position}, users: {players.Count}");
-
-        foreach (Player p in players)
-        {
-            int id_player = p.id;
-            if(id_player != id_self){
-                this.player.opponent = p.gameObject;
-                Debug.Log($"SELECTED Player {id_player}: {this.player.opponent.transform.position}");
-                break;
-            }
-            else{
-                Debug.Log($"DISCARD Player: {id_player}");
-            }
-            
-        }
-        */
         
     }
+        
+    #endregion
 
+    #region Command
+    
     [Command]
     public void cmdMoveX(float x){
         this.transform.Translate(x, 0, 0, Space.World);
-        
     }
 
 
     [Command]
     public void cmdJump(float force){
         this.rb.AddForce(new Vector3(0,force,0), ForceMode.Force);
-        
     }
 
 
     [Command]
-    public void cmdLookAt(){
+    public void cmdLookAt(float x){
         
         this.transform.LookAt(new Vector3(
-            this.player.opponent.transform.position.x,
+            x,
             this.transform.position.y,
             this.transform.position.z
         ));
     }
 
+    #endregion
+    
+    public override void OnStartClient()
+    {
+        if(!hasAuthority) return;
+
+        this.player = NetworkClient.connection.identity.GetComponent<NetworkPlayer>();
+        Debug.Log("PLAYER: " + this.player.id);
+        
+    }
+
+    private void findOpponent(){
+        foreach (GameObject gameObjectPlayer in GameObject.FindGameObjectsWithTag("Character"))
+        {
+            if(!GameObject.ReferenceEquals(this.gameObject, gameObjectPlayer)){
+                this.player.opponent = gameObjectPlayer;
+            }
+        }
+    }
+
+    void Start(){
+        this.side = 0;
+        this.side_last = -1;
+        this.inputActions = new InputActions();
+        this.inputActions.Player.Enable();
+        this.inputActions.Player.Jump.performed += this.jump;
+        this.side = this.side_last;
+        this.animator = this.GetComponent<Animator>();
+        this.rb = this.GetComponent<Rigidbody>();
+    }
 
 
+    
 
-
-    [ClientCallback]
     private void Update()
     {
         if(!hasAuthority) return;
 
-
-        this.timer_counter_look_to += Time.deltaTime;
-        if(this.timer_counter_look_to > this.timer_base_look_to){
-            // todo: check if this can be optimized
-            this.cmdLookAt();
-            this.timer_counter_look_to = 0f;            
+        if(this.player.opponent == null){
+            // todo: optimize
+            this.findOpponent();
+            return;
         }
+
+
+        this.side = (this.transform.position.x < this.player.opponent.transform.position.x)? 0:1;
+
+        if(this.side != this.side_last){
+            // todo: check if this can be optimized
+            Debug.Log("Player actions:Update:LOOK AT");
+            this.cmdLookAt(this.player.opponent.transform.position.x);      
+        }
+        this.side_last = this.side;
         
         
         float left = inputActions.Player.WalkLeft.ReadValue<float>();
