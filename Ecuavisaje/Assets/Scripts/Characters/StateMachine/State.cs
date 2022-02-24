@@ -4,13 +4,14 @@ using UnityEngine;
 
 public abstract class State
 {
+    public static int VERBOSE_LEVEL = 1;
     protected bool isRootState = false;
-    public StateMachine context;
+    public CharacterStateMachine context;
     public StateFactory factory;
     protected State stateCurrentSub;
     protected State stateCurrentSuper;
 
-    public State(StateMachine context, StateFactory factory){
+    public State(CharacterStateMachine context, StateFactory factory){
         this.context = context;
         this.factory = factory;
     }

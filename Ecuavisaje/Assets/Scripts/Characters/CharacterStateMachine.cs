@@ -11,7 +11,7 @@ public enum AnimationEnum
     ReceiveDamageUp, Stunned
 }
 
-public class StateMachine : NetworkBehaviour
+public class CharacterStateMachine : NetworkBehaviour
 {
     public State stateCurrent {get;set;}
     public StateFactory stateFactory {get;set;}
