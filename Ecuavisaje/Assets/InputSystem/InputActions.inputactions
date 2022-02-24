@@ -34,12 +34,12 @@
                 },
                 {
                     "name": "Bend",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "1eec4b62-a686-49e1-a0c9-0f9d30d99868",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Punch1",
@@ -79,12 +79,12 @@
                 },
                 {
                     "name": "Block",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "fbe8a047-4a2a-4c81-bc94-fe541e19e9b6",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [

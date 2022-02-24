@@ -18,6 +18,24 @@ public class PlayerActions: NetworkBehaviour
     private int side_last;
     private NetworkPlayer player;
 
+    private int groundMask;
+
+    public bool is_walking {get;set;} = false;
+    public bool is_idle {get;set;} = true;
+    public bool is_jump_pressed  {get;set;} = false;
+    public bool is_grounded  {get;set;} = false;
+    public bool is_bend_pressed  {get;set;} = false;
+    public bool is_attacking  {get;set;} = false;
+    public bool is_punch1_pressed  {get;set;} = false;
+
+
+
+    
+
+    public Animator getAnimator(){
+        return this.animator;
+    }
+
     #region Server
 
     public override void OnStartServer()
@@ -40,6 +58,11 @@ public class PlayerActions: NetworkBehaviour
         this.rb.AddForce(new Vector3(0,force,0), ForceMode.Force);
     }
 
+    [Command]
+    public void cmdBend(){
+        // todo: implement bend collision changer
+    }
+
 
     [Command]
     public void cmdLookAt(float x){
@@ -58,7 +81,23 @@ public class PlayerActions: NetworkBehaviour
         if(!hasAuthority) return;
 
         this.player = NetworkClient.connection.identity.GetComponent<NetworkPlayer>();
-        Debug.Log("PLAYER: " + this.player.id);
+
+        this.inputActions = new InputActions();
+        this.inputActions.Player.Enable();
+        this.inputActions.Player.Jump.performed += this.jump;
+        this.inputActions.Player.Punch1.performed += this.punch1;
+
+        
+    }
+
+    public override void OnStopClient()
+    {
+        if(!hasAuthority) return;
+
+        this.inputActions.Player.Disable();
+        this.inputActions.Player.Jump.performed -= this.jump;
+        this.inputActions.Player.Punch1.performed -= this.punch1;
+
         
     }
 
@@ -74,16 +113,12 @@ public class PlayerActions: NetworkBehaviour
     void Start(){
         this.side = 0;
         this.side_last = -1;
-        this.inputActions = new InputActions();
-        this.inputActions.Player.Enable();
-        this.inputActions.Player.Jump.performed += this.jump;
         this.side = this.side_last;
         this.animator = this.GetComponent<Animator>();
         this.rb = this.GetComponent<Rigidbody>();
+        this.groundMask = 1 << LayerMask.NameToLayer("Ground");
     }
 
-
-    
 
     private void Update()
     {
@@ -100,7 +135,6 @@ public class PlayerActions: NetworkBehaviour
 
         if(this.side != this.side_last){
             // todo: check if this can be optimized
-            Debug.Log("Player actions:Update:LOOK AT");
             this.cmdLookAt(this.player.opponent.transform.position.x);      
         }
         this.side_last = this.side;
@@ -111,31 +145,50 @@ public class PlayerActions: NetworkBehaviour
         
         if(left > 0){
             this.cmdMoveX(-this.speedWalk * Time.deltaTime);
-            this.animator.SetBool("is_walking", true);
+            this.is_walking = true;
         }
         else if(right > 0){
             this.cmdMoveX(this.speedWalk * Time.deltaTime);
-            this.animator.SetBool("is_walking", true);
+            this.is_walking = true;
         }
         else{
-            this.animator.SetBool("is_walking", false);
+            this.is_walking = false;
+        }
+
+        float bend = inputActions.Player.Bend.ReadValue<float>();
+        if(bend > 0){
+            this.is_bend_pressed = true;
+        }
+        else{
+            this.is_bend_pressed = false;
         }
         
         
+    }
+
+    void FixedUpdate(){
+        RaycastHit raycastHit;
+        if(Physics.Raycast(this.transform.position, Vector3.down, out raycastHit, 1f, this.groundMask)){
+            is_grounded = true;
+        }
+        else{
+            is_grounded = false;
+        }
+        // Debug.Log(is_grounded);
     }
 
 
     private void jump(InputAction.CallbackContext context){
         if(!hasAuthority) return;
+        this.is_jump_pressed = true;
         this.cmdJump(this.forceJump);
-    }
-
-    private void bend(InputAction.CallbackContext context){
-        if(!hasAuthority) return;
     }
 
     private void punch1(InputAction.CallbackContext context){
         if(!hasAuthority) return;
+        this.is_attacking = true;
+        this.is_punch1_pressed = true;
+        // this.cmdPunch1();
     }
 
     private void punch2(InputAction.CallbackContext context){
@@ -150,9 +203,6 @@ public class PlayerActions: NetworkBehaviour
         if(!hasAuthority) return;
     }
 
-    private void block(InputAction.CallbackContext context){
-        if(!hasAuthority) return;
-    }
 
 
 }

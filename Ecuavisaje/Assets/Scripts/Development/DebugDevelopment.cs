@@ -14,6 +14,9 @@ public class DebugDevelopment : MonoBehaviour
     // Start is called before the first frame update
     [Header("Development")]
     [SerializeField] private bool is_debugging = true;
+    [SerializeField] private bool handle_room = false;
+
+    
     [SerializeField] private bool exec_test = false;
     [SerializeField] private AutoconnectionType autoconnect = AutoconnectionType.none;
 
@@ -23,11 +26,19 @@ public class DebugDevelopment : MonoBehaviour
     private GameObject networkRoomManager;
     void Start()
     {
-        this.networkRoomManager = GameObject.FindGameObjectWithTag("NetworkRoomManager");
+        if(this.handle_room){
+            this.networkRoomManager = GameObject.FindGameObjectWithTag("NetworkRoomManager");
+            if(this.is_debugging){
+                this.networkRoomManager.SetActive(false);
+            }
+            else{
+                this.networkRoomManager.SetActive(true);
+            }
+        }
             
 
         if(this.is_debugging){
-            this.networkRoomManager.SetActive(false);
+            
 
             if(exec_test){
                 this.test();
@@ -52,10 +63,7 @@ public class DebugDevelopment : MonoBehaviour
                     break;
             }
             
-        }
-        else{
-            this.networkRoomManager.SetActive(true);
-        }    
+        }  
     }
 
     private void test(){
@@ -68,6 +76,7 @@ public class DebugDevelopment : MonoBehaviour
 
 
         if(this.autoconnect == AutoconnectionType.none) return;
+        if(!this.handle_room) return;
 
         this.networkRoomManager.SetActive(true);
 
