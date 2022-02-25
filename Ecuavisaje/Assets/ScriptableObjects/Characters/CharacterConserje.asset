@@ -16,3 +16,6 @@ MonoBehaviour:
   characterEnum: 2
   characterPrefab: {fileID: 5482155463025145165, guid: adc9d1749d409421b928020568b9d385, type: 3}
   description: El Exito
+  audios:
+  - characterAudioEnum: 0
+    audio: {fileID: 8300000, guid: 4852268353bebb788b4b287dc17a425a, type: 3}

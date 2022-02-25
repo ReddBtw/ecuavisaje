@@ -20,6 +20,12 @@ public class NetworkPlayer : NetworkBehaviour
 
     [SerializeField] private Character[] characters = new Character[0];
 
+    #region GettersSetters
+
+    public Character[] getCharacters(){
+        return this.characters;
+    }
+    #endregion
 
     #region Server
 
@@ -69,7 +75,7 @@ public class NetworkPlayer : NetworkBehaviour
 
         
 
-        this.cmdSetCharacter(CharacterEnum.Conserje);
+        this.cmdSetCharacter(CharacterEnum.Lasso);
 
         if (NetworkServer.active) { return; }
 
