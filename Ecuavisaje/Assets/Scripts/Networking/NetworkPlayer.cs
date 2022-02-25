@@ -69,7 +69,7 @@ public class NetworkPlayer : NetworkBehaviour
 
         
 
-        this.cmdSetCharacter(CharacterEnum.Lasso);
+        this.cmdSetCharacter(CharacterEnum.Conserje);
 
         if (NetworkServer.active) { return; }
 

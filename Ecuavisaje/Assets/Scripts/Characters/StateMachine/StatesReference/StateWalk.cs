@@ -15,8 +15,26 @@ public class StateWalk : State
     {
         if(State.VERBOSE_LEVEL > 0)
             Debug.Log("ENTER Walk");
-        if(!this.context.isJumping)
-            this.context.animator.Play(AnimationEnum.Walk.ToString());
+        if(!this.context.isJumping){
+            if(this.context.side == 0){
+                if(this.context.isPressedLeft){
+                    this.context.animator.Play(AnimationEnum.WalkBackward.ToString());
+                }
+                else{
+                    this.context.animator.Play(AnimationEnum.WalkForward.ToString());
+                }
+            }
+            else{
+                if(this.context.isPressedRight){
+                    this.context.animator.Play(AnimationEnum.WalkBackward.ToString());
+                }
+                else{
+                    this.context.animator.Play(AnimationEnum.WalkForward.ToString());
+                }
+            }
+            
+        }
+            
         
     }
 

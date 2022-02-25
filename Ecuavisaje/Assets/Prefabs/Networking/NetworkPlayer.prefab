@@ -67,3 +67,4 @@ MonoBehaviour:
   characterEnum: 0
   characters:
   - {fileID: 11400000, guid: 52866b5355a2053d483349ba01dc7dad, type: 2}
+  - {fileID: 11400000, guid: d85b7d06be3812b629c4d404c425b022, type: 2}

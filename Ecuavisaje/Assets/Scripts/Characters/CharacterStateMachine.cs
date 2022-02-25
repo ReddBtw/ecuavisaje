@@ -6,9 +6,10 @@ using Mirror;
 using System;
 public enum AnimationEnum
 {
-    Idle, Walk, Jump, Bend, Sweep, Punch1, PUnch2,
+    Idle, WalkForward, WalkBackward, Jump, Bend, Sweep, Punch1, Punch2,
     Kick1, Kick2, Block1, GettingUp, KnockedOut,
-    ReceiveDamageUp, Stunned
+    ReceiveDamageUp, Stunned, Special1, Special2,
+    Ultimate, Uppercut
 }
 
 public class CharacterStateMachine : NetworkBehaviour
@@ -20,7 +21,7 @@ public class CharacterStateMachine : NetworkBehaviour
     private Rigidbody rb;
    
     private InputActions inputActions;
-    private int side;
+    public int side {get;set;}
     private int side_last;
     private NetworkPlayer player;
 
@@ -60,6 +61,9 @@ public class CharacterStateMachine : NetworkBehaviour
         {
             case CharacterEnum.Lasso:
                 this.stateFactory = new StateFactoryLasso(this);
+                break;
+            case CharacterEnum.Conserje:
+                this.stateFactory = new StateFactoryConserje(this);
                 break;
             default:
                 throw new System.Exception("CharacterEnum invalid");

@@ -6,7 +6,8 @@ using UnityEngine;
 public enum CharacterEnum
 {
     None,
-    Lasso    
+    Lasso,
+    Conserje
 }
 
 [CreateAssetMenu(menuName = "Character")]
