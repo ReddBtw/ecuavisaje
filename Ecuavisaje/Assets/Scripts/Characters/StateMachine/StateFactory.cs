@@ -14,4 +14,7 @@ public abstract class StateFactory
     public abstract State createIdle();
     public abstract State createWalk();
     public abstract State createPunch();
+    public abstract State createSpecial1();
+
+    
 }

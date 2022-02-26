@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using Mirror;
 using System;
@@ -22,7 +23,9 @@ public enum AnimationEnum
 public class CharacterStateMachine : NetworkBehaviour
 {
     [SyncVar(hook=nameof(handleUpdatedHealth))]
-    private int health = 100;
+    public int health = 80;
+
+    [SerializeField] Image healthImage;
 
     public State stateCurrent {get;set;}
     public StateFactory stateFactory {get;set;}
@@ -47,6 +50,9 @@ public class CharacterStateMachine : NetworkBehaviour
     public bool isJumping = false;
     public bool isAttacking = false;
     public bool isPressedPunch1 = false;
+    public bool isPressedPunch2 = false;
+
+    
 
     
 
@@ -54,6 +60,8 @@ public class CharacterStateMachine : NetworkBehaviour
     [Header("Character config")]
     [SerializeField] private CharacterEnum characterEnum = CharacterEnum.None;
     [SerializeField] private GameObject pointHitPunch;
+    [SerializeField] private Character[] characters;
+
 
     [Header("Physics")]
     [SerializeField]
@@ -118,6 +126,7 @@ public class CharacterStateMachine : NetworkBehaviour
         this.inputActions.Player.Enable();
         this.inputActions.Player.Jump.performed += this.jump;
         this.inputActions.Player.Punch1.performed += this.punch1;
+        this.inputActions.Player.Punch2.performed += this.punch2;
 
         this.player = NetworkClient.connection.identity.GetComponent<NetworkPlayer>();
 
@@ -258,6 +267,15 @@ public class CharacterStateMachine : NetworkBehaviour
         this.isPressedPunch1 = true;
     }
 
+    private void punch2(InputAction.CallbackContext context){
+        if(!hasAuthority) return;
+        this.isAttacking = true;
+        this.isPressedPunch2 = true;
+    }
+
+
+    
+
     private void findOpponent(){
         foreach (GameObject gameObjectPlayer in GameObject.FindGameObjectsWithTag("Character"))
         {
@@ -269,7 +287,9 @@ public class CharacterStateMachine : NetworkBehaviour
 
     public void handleUpdatedHealth(int valueOld, int valueNew){
         this.health = valueNew;
+
         if(this.animator != null){
+            healthImage.fillAmount = (float)this.health/100;
             StartCoroutine(receiveDamage(AnimationEnum.ReceiveDamageUp));
             
         }
@@ -328,11 +348,36 @@ public class CharacterStateMachine : NetworkBehaviour
             }
             
         }
-        Debug.Log("HITS: " + hits.Length);
-        if(hits.Length == 1){
+    }
 
+
+
+    [Command]
+    public void cmdInvokeSpecial1(CharacterEnum characterEnum){
+        foreach (Character character in this.characters)
+        {   
+            if(character.characterEnum == characterEnum){
+                if(character.special1.skillType == SkillType.throw_object){
+                    
+                    Vector3 vectorPosition = new Vector3(this.transform.position.x+5,this.transform.position.y+4,this.transform.position.z);
+                    Quaternion rotation = Quaternion.Euler(
+                        character.special1.gameObjectPrefab.transform.rotation.x, 
+                        90, // this.transform.rotation.y not working todo: why? 
+                        -90
+
+                    );
+
+
+
+                    GameObject instantiateSpecial1 = Instantiate(character.special1.gameObjectPrefab, vectorPosition, rotation);
+                    NetworkServer.Spawn(instantiateSpecial1, this.connectionToClient);
+                }
+            }
+            
         }
     }
+
+    
 
     #endregion
 
@@ -341,6 +386,7 @@ public class CharacterStateMachine : NetworkBehaviour
     [ClientRpc]
     public void rpcPlayAudio(CharacterEnum characterEnum, CharacterAudioEnum characterAudioEnum){
         // todo: optimice with hashing?
+        // todo: repair play audio
 
         this.audioSource.PlayOneShot(this.dump);
 
@@ -353,8 +399,8 @@ public class CharacterStateMachine : NetworkBehaviour
                 foreach (CharacterAudio characterAudio in character.audios)
                 {
                     if(characterAudio.characterAudioEnum == characterAudioEnum){
-                        Debug.Log($"Audio {characterAudio.characterAudioEnum} {characterAudio.audio}");
-                        // this.audioSource.PlayOneShot(characterAudio.audio);
+                        // Debug.Log($"Audio {characterAudio.characterAudioEnum} {characterAudio.audio}");
+                        this.audioSource.PlayOneShot(characterAudio.audio);
                         break;
                     }
                 }
@@ -362,6 +408,7 @@ public class CharacterStateMachine : NetworkBehaviour
             }            
         }
         */
+        
     }
         
     #endregion

@@ -2313,7 +2313,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  dump: {fileID: 8300000, guid: 701d580936ef9ac79ae9026f276ed4f0, type: 3}
+  health: 100
+  dump: {fileID: 8300000, guid: bb4fe015486f8ee65921a7bb2b4565ef, type: 3}
   isGrounded: 0
   isPressedJump: 0
   isPressedBend: 0
@@ -2323,8 +2324,12 @@ MonoBehaviour:
   isJumping: 0
   isAttacking: 0
   isPressedPunch1: 0
+  isPressedPunch2: 0
   characterEnum: 1
   pointHitPunch: {fileID: 8178677196751378909}
+  characters:
+  - {fileID: 11400000, guid: d85b7d06be3812b629c4d404c425b022, type: 2}
+  - {fileID: 11400000, guid: 52866b5355a2053d483349ba01dc7dad, type: 2}
   speedWalk: 10
   forceJump: 600
 --- !u!82 &-82014230920191851
