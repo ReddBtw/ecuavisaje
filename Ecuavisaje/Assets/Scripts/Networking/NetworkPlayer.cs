@@ -73,9 +73,20 @@ public class NetworkPlayer : NetworkBehaviour
     {
         if(!hasAuthority) { return; }
 
-        
+        try{
+        	if(((EcNetworkRoomManager)NetworkManager.singleton).players.Count > 0){
+            this.cmdSetCharacter(CharacterEnum.Lasso);
+        }
+        else{
+            this.cmdSetCharacter(CharacterEnum.Conserje);
 
-        this.cmdSetCharacter(CharacterEnum.Lasso);
+        }
+        
+        }
+        catch(Exception e){
+        	this.cmdSetCharacter(CharacterEnum.Lasso);
+        }
+        
 
         if (NetworkServer.active) { return; }
 

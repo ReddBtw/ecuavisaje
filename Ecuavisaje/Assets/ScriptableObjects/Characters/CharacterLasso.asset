@@ -20,3 +20,6 @@ MonoBehaviour:
   - characterAudioEnum: 0
     audio: {fileID: 8300000, guid: bb4fe015486f8ee65921a7bb2b4565ef, type: 3}
   dump: {fileID: 8300000, guid: 4852268353bebb788b4b287dc17a425a, type: 3}
+  special1:
+    skillType: 1
+    gameObjectPrefab: {fileID: 7758553537545758315, guid: 7eacf31edf4b5215cafcc0654af5c079, type: 3}

@@ -36,6 +36,11 @@ public class StateIdle : State
             this.switchState(this.factory.createPunch());
         }
 
+
+        if(this.context.isPressedPunch2){
+            this.switchState(this.factory.createSpecial1());
+        }
+
         
     }
     public override void exit(){}

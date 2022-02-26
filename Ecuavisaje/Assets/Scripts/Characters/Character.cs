@@ -17,9 +17,20 @@ public enum CharacterAudioEnum
 
 [Serializable]
  public struct CharacterAudio {
-     public CharacterAudioEnum characterAudioEnum;
-     public AudioClip audio;
- }
+    public CharacterAudioEnum characterAudioEnum;
+    public AudioClip audio;
+}
+
+public enum SkillType
+{
+    normal, throw_object
+}
+
+[Serializable]
+ public struct Skill {
+    public SkillType skillType;
+    public GameObject gameObjectPrefab;
+}
 
 [CreateAssetMenu(menuName = "Character")]
 public class Character: ScriptableObject
@@ -30,5 +41,7 @@ public class Character: ScriptableObject
     [SerializeField] public string description;
     [SerializeField] public CharacterAudio[] audios;
     [SerializeField] public AudioClip dump;
+
+    [SerializeField] public Skill special1;
 
 }

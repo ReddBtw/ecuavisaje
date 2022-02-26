@@ -33,6 +33,10 @@ public class StateFactoryConserje: StateFactory{
     {
         return new StateConserjePunch(this.stateMachine, this);
     }
+    public override State createSpecial1()
+    {
+        return new StateConserjePunch(this.stateMachine, this);
+    }
 
 
 }
