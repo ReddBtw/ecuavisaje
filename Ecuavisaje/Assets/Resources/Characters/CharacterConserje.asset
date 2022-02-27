@@ -10,16 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15a0f505435358fbcb93f16d1af27486, type: 3}
-  m_Name: CharacterLasso
+  m_Name: CharacterConserje
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
-  characterEnum: 1
-  characterPrefab: {fileID: 8156153236522879344, guid: 1a4fa7fe1812d47dfa4a965053ac004e, type: 3}
-  description: Presi
-  audios:
-  - characterAudioEnum: 0
+  characterEnum: 2
+  characterPrefab: {fileID: 2142224089039901612, guid: a888349017d2e3ac2a6eac08d4777a39, type: 3}
+  description: El Exito
+  punch1:
+    skillType: 0
+    gameObjectPrefab: {fileID: 0}
     audio: {fileID: 8300000, guid: bb4fe015486f8ee65921a7bb2b4565ef, type: 3}
-  dump: {fileID: 8300000, guid: 4852268353bebb788b4b287dc17a425a, type: 3}
+    damage: 10
   special1:
-    skillType: 1
-    gameObjectPrefab: {fileID: 7758553537545758315, guid: 7eacf31edf4b5215cafcc0654af5c079, type: 3}
+    skillType: 0
+    gameObjectPrefab: {fileID: 0}
+    audio: {fileID: 8300000, guid: 4852268353bebb788b4b287dc17a425a, type: 3}
+    damage: 20

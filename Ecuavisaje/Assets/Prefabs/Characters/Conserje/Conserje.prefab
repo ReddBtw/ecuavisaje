@@ -504,6 +504,8 @@ GameObject:
   - component: {fileID: 6497951343120621630}
   - component: {fileID: 515131143547908934}
   - component: {fileID: 510875154022810930}
+  - component: {fileID: 4635936647833472420}
+  - component: {fileID: 1860231462551450931}
   m_Layer: 7
   m_Name: Conserje
   m_TagString: Character
@@ -759,9 +761,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  health: 100
-  healthImage: {fileID: 7056568431339305363, guid: 945d47ab4f4f04398bfe2f17dd153972, type: 3}
-  dump: {fileID: 8300000, guid: 0a22397021f3e9e4c96c95e99c59a76a, type: 3}
   isGrounded: 1
   isPressedJump: 0
   isPressedBend: 0
@@ -773,12 +772,37 @@ MonoBehaviour:
   isPressedPunch1: 0
   isPressedPunch2: 0
   characterEnum: 2
-  pointHitPunch: {fileID: 4876110282047282081}
-  characters:
-  - {fileID: 11400000, guid: d85b7d06be3812b629c4d404c425b022, type: 2}
-  - {fileID: 11400000, guid: 52866b5355a2053d483349ba01dc7dad, type: 2}
   speedWalk: 12
   forceJump: 400
+--- !u!114 &4635936647833472420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2142224089039901612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9b444a2431a93d57b1f571c4ca56320, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  pointHitPunch: {fileID: 4876110282047282081}
+--- !u!114 &1860231462551450931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2142224089039901612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e62b34794f6ff07997d9f00befe628f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!1 &2197435804985585911
 GameObject:
   m_ObjectHideFlags: 0

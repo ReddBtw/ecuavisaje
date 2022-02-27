@@ -43,10 +43,10 @@ public class StateWalk : State
     {
         this.checkSwitchStates();
         if(this.context.isPressedLeft){
-            this.context.cmdMoveX(-this.context.speedWalk * Time.deltaTime);
+            this.context.characterCommandGiver.cmdMoveX(-this.context.speedWalk * Time.deltaTime);
         }
         else if(this.context.isPressedRight){
-            this.context.cmdMoveX(this.context.speedWalk * Time.deltaTime);
+            this.context.characterCommandGiver.cmdMoveX(this.context.speedWalk * Time.deltaTime);
         }
     }
 

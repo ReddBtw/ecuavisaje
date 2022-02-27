@@ -31,11 +31,11 @@ public class StateFactoryConserje: StateFactory{
     }
     public override State createPunch()
     {
-        return new StateConserjePunch(this.stateMachine, this);
+        return new StateConserjePunch1(this.stateMachine, this);
     }
     public override State createSpecial1()
     {
-        return new StateConserjePunch(this.stateMachine, this);
+        return new StateConserjePunch1(this.stateMachine, this);
     }
 
 
@@ -77,9 +77,9 @@ public class StateConserjeWalk : StateWalk
     // overrite methods if needed
 }
 
-public class StateConserjePunch : StatePunch
+public class StateConserjePunch1 : StatePunch1
 {
-    public StateConserjePunch(CharacterStateMachine context, StateFactory factory):base(context,factory){
+    public StateConserjePunch1(CharacterStateMachine context, StateFactory factory):base(context,factory){
 
     }
 }

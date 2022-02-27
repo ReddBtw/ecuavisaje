@@ -83,7 +83,8 @@ public class NetworkPlayer : NetworkBehaviour
         }
         
         }
-        catch(Exception e){
+        catch (Exception)
+        {
         	this.cmdSetCharacter(CharacterEnum.Lasso);
         }
         
