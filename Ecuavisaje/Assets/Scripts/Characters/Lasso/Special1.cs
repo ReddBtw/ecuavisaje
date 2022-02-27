@@ -6,6 +6,9 @@ using Mirror;
 public class Special1 : NetworkBehaviour
 {
     [SerializeField] float forceBegin = 2f;
+    [SerializeField] float damage = 10f;
+    public Collider ignoreCollider;
+
     
     void Start()
     {
@@ -30,10 +33,13 @@ public class Special1 : NetworkBehaviour
         this.cmdMoveMe();
     }
 
-    [Server]
+    [ServerCallback]
     private void OnCollisionEnter(Collision other) {
+        if(other.collider == this.ignoreCollider) return;
+
         if(other.gameObject.tag == "Character"){
-            other.gameObject.GetComponent<CharacterStateMachine>().health -= 10;
+            Debug.Log("DAMAGING " + other.gameObject.name);
+            other.gameObject.GetComponent<Health>().damage(this.damage);
         }
     }
 }

@@ -31,7 +31,7 @@ public class StateJump : State
         if(!this.context.isJumping){
 
 
-            this.context.cmdJump(this.context.forceJump);
+            this.context.characterCommandGiver.cmdJump(this.context.forceJump);
             this.context.isJumping = true;
             this.context.isPressedJump = false;
             this.context.animator.Play(AnimationEnum.Jump.ToString());

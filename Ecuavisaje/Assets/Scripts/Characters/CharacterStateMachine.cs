@@ -5,35 +5,21 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using Mirror;
 using System;
-public enum AnimationEnum
-{
-    Idle, WalkForward, WalkBackward, Jump, Bend, Sweep, Punch1, Punch2,
-    Kick1, Kick2, Block1, GettingUp, KnockedOut,
-    ReceiveDamageUp, Stunned, Special1, Special2,
-    Ultimate, Uppercut
-}
+
 
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(NetworkTransform))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(NetworkIdentity))]
 [RequireComponent(typeof(NetworkAnimator))]
-[RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(CharacterCommandGiver))]
+[RequireComponent(typeof(Health))]
 public class CharacterStateMachine : NetworkBehaviour
 {
-    [SyncVar(hook=nameof(handleUpdatedHealth))]
-    public int health = 80;
-
-    [SerializeField] Image healthImage;
-
     public State stateCurrent {get;set;}
     public StateFactory stateFactory {get;set;}
 
-    public Animator animator {get;set;}
-    private Rigidbody rb;
-    public  AudioSource audioSource {get;set;}   
-    [SerializeField] AudioClip dump;
+    
     private InputActions inputActions;
     public int side {get;set;}
     private int side_last;
@@ -53,15 +39,15 @@ public class CharacterStateMachine : NetworkBehaviour
     public bool isPressedPunch2 = false;
 
     
+    public Animator animator {get;set;}
+    public CharacterCommandGiver characterCommandGiver {get; set;}
+    public Health health {get; set;}
 
-    
-
+    private List<Character> characters;  
     
     [Header("Character config")]
     [SerializeField] private CharacterEnum characterEnum = CharacterEnum.None;
-    [SerializeField] private GameObject pointHitPunch;
-    [SerializeField] private Character[] characters;
-
+    public Character characterSelected {get;set;}
 
     [Header("Physics")]
     [SerializeField]
@@ -71,27 +57,15 @@ public class CharacterStateMachine : NetworkBehaviour
 
     #region GettersSetters
 
-    public CharacterEnum getCharacterEnum(){
-        return this.characterEnum;
-    }
-
-    public GameObject getPointHitPunch(){
-        return this.pointHitPunch;
-    }
-    
+    public CharacterEnum getCharacterEnum(){ return this.characterEnum; }
         
     #endregion
 
-
-    #region Server
+    #region Server and Client callbacks
     public override void OnStartServer(){
-
-
 
         if(!NetworkServer.active) return;
 
-
-        
 
         foreach(GameObject gameObjectPlayer in GameObject.FindGameObjectsWithTag("Player")){
             NetworkPlayer p = gameObjectPlayer.GetComponent<NetworkPlayer>();
@@ -99,25 +73,9 @@ public class CharacterStateMachine : NetworkBehaviour
             this.player = p;
             
         }
-
         
+    }
 
-        /*
-        foreach(Character c in this.player.getCharacters()){
-            if(c.characterEnum == this.characterEnum){
-                this.characterSelected = c;
-                Debug.Log("Character selected: " + c.characterEnum);
-                break;
-            }
-        }
-        */
-
-        
-        
-    }        
-    #endregion
-
-    #region Client
     public override void OnStartClient()
     {
         if(!hasAuthority) return;
@@ -131,14 +89,9 @@ public class CharacterStateMachine : NetworkBehaviour
         this.player = NetworkClient.connection.identity.GetComponent<NetworkPlayer>();
 
         Debug.Log("Net id: " + this.player.netId + ". Has: " + this.player.hasAuthority);
-
-        
-
-
-        
     }
 
-    public override void OnStopClient()
+     public override void OnStopClient()
     {
         if(!hasAuthority) return;
 
@@ -148,12 +101,23 @@ public class CharacterStateMachine : NetworkBehaviour
 
         
     }
+    #endregion
 
 
     void Start(){
-        this.rb = this.GetComponent<Rigidbody>();
+
+        this.characters = UtilsResources.getScriptableObjectsCharacters();
+
+        foreach (Character character in this.characters)
+        {
+            if(this.characterEnum == character.characterEnum){
+                this.characterSelected = character;
+            }
+        }
+
+        this.characterCommandGiver = this.GetComponent<CharacterCommandGiver>();
+        this.health = this.GetComponent<Health>();
         this.animator = this.GetComponent<Animator>();
-        this.audioSource = this.GetComponent<AudioSource>();
         this.side = 0;
         this.side_last = -1;
         this.side = this.side_last;
@@ -189,11 +153,7 @@ public class CharacterStateMachine : NetworkBehaviour
         }
 
         // Vector3 point = new Vector3(this.transform.position.x+1, this.transform.position.y, this.transform.position.z);
-        
-        if(this.pointHitPunch != null){
-            Debug.DrawLine(this.transform.position, this.pointHitPunch.transform.position, Color.blue);
-        }
-        
+
         this.checkLookDirection();
         this.readInput();
         this.stateCurrent.updateStates();        
@@ -204,7 +164,7 @@ public class CharacterStateMachine : NetworkBehaviour
 
         if(this.side != this.side_last){
             // todo: check if this can be optimized
-            this.cmdLookAt(this.player.opponent.transform.position.x);      
+            this.characterCommandGiver.cmdLookAt(this.player.opponent.transform.position.x);      
         }
         this.side_last = this.side;
     }
@@ -273,9 +233,6 @@ public class CharacterStateMachine : NetworkBehaviour
         this.isPressedPunch2 = true;
     }
 
-
-    
-
     private void findOpponent(){
         foreach (GameObject gameObjectPlayer in GameObject.FindGameObjectsWithTag("Character"))
         {
@@ -283,134 +240,5 @@ public class CharacterStateMachine : NetworkBehaviour
                 this.player.opponent = gameObjectPlayer;
             }
         }
-    }
-
-    public void handleUpdatedHealth(int valueOld, int valueNew){
-        this.health = valueNew;
-
-        if(this.animator != null){
-            healthImage.fillAmount = (float)this.health/100;
-            StartCoroutine(receiveDamage(AnimationEnum.ReceiveDamageUp));
-            
-        }
-    }
-
-    IEnumerator receiveDamage(AnimationEnum animationEnum){
-        this.animator.Play(animationEnum.ToString());
-        yield return new WaitForSeconds(1f);
-        this.animator.Play(AnimationEnum.Idle.ToString());
-    }
-
-
-
-    #endregion
-
-    
-
-    #region Command
-    
-    [Command]
-    public void cmdMoveX(float x){
-        this.transform.Translate(x, 0, 0, Space.World);
-    }
-
-
-    [Command]
-    public void cmdJump(float force){
-        this.rb.AddForce(new Vector3(0,force,0), ForceMode.Force);
-    }
-
-    [Command]
-    public void cmdLookAt(float x){
-        
-        this.transform.LookAt(new Vector3(
-            x,
-            this.transform.position.y,
-            this.transform.position.z
-        ));
-    }
-
-    [Command]
-    public void cmdPlaySound(CharacterEnum characterEnum, CharacterAudioEnum characterAudioEnum){
-        this.rpcPlayAudio(characterEnum, characterAudioEnum);
-    }
-
-    [Command]
-    public void cmdAttackPunch(float attackRange, int layer){
-        Collider[] hits = Physics.OverlapSphere(this.getPointHitPunch().transform.position, attackRange, layer);
-
-        foreach (Collider hit in hits)
-        {
-            CharacterStateMachine h = hit.gameObject.GetComponent<CharacterStateMachine>();
-            if(h.connectionToClient.connectionId != this.connectionToClient.connectionId){
-                Debug.Log("Enemy: " + h.gameObject.name);
-                h.health -= 10;
-            }
-            
-        }
-    }
-
-
-
-    [Command]
-    public void cmdInvokeSpecial1(CharacterEnum characterEnum){
-        foreach (Character character in this.characters)
-        {   
-            if(character.characterEnum == characterEnum){
-                if(character.special1.skillType == SkillType.throw_object){
-                    
-                    Vector3 vectorPosition = new Vector3(this.transform.position.x+5,this.transform.position.y+4,this.transform.position.z);
-                    Quaternion rotation = Quaternion.Euler(
-                        character.special1.gameObjectPrefab.transform.rotation.x, 
-                        90, // this.transform.rotation.y not working todo: why? 
-                        -90
-
-                    );
-
-
-
-                    GameObject instantiateSpecial1 = Instantiate(character.special1.gameObjectPrefab, vectorPosition, rotation);
-                    NetworkServer.Spawn(instantiateSpecial1, this.connectionToClient);
-                }
-            }
-            
-        }
-    }
-
-    
-
-    #endregion
-
-    #region RPC
-
-    [ClientRpc]
-    public void rpcPlayAudio(CharacterEnum characterEnum, CharacterAudioEnum characterAudioEnum){
-        // todo: optimice with hashing?
-        // todo: repair play audio
-
-        this.audioSource.PlayOneShot(this.dump);
-
-        /*
-        foreach (Character character in this.player.getCharacters())
-        {
-            if(character.characterEnum == characterEnum){
-                this.audioSource.PlayOneShot(character.dump);
-                
-                foreach (CharacterAudio characterAudio in character.audios)
-                {
-                    if(characterAudio.characterAudioEnum == characterAudioEnum){
-                        // Debug.Log($"Audio {characterAudio.characterAudioEnum} {characterAudio.audio}");
-                        this.audioSource.PlayOneShot(characterAudio.audio);
-                        break;
-                    }
-                }
-                
-            }            
-        }
-        */
-        
-    }
-        
-    #endregion
-
+    }    
 }

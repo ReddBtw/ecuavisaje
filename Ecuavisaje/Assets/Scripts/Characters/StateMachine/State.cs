@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class State
 {
-    public static int VERBOSE_LEVEL = 1;
+    public static int VERBOSE_LEVEL = 0;
     protected bool isRootState = false;
     public CharacterStateMachine context;
     public StateFactory factory;

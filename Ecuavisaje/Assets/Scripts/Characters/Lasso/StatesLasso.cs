@@ -31,7 +31,7 @@ public class StateFactoryLasso: StateFactory{
     }
     public override State createPunch()
     {
-        return new StateLassoPunch(this.stateMachine, this);
+        return new StateLassoPunch1(this.stateMachine, this);
     }
     public override State createSpecial1()
     {
@@ -77,9 +77,9 @@ public class StateLassoWalk : StateWalk
     // overrite methods if needed
 }
 
-public class StateLassoPunch : StatePunch
+public class StateLassoPunch1 : StatePunch1
 {
-    public StateLassoPunch(CharacterStateMachine context, StateFactory factory):base(context,factory){
+    public StateLassoPunch1(CharacterStateMachine context, StateFactory factory):base(context,factory){
 
     }
 }
@@ -96,11 +96,12 @@ public class StateLassoSpecial1 : State
 
     public override void enter()
     {
-        Debug.Log("ENTER SPECIAL1");
+        if(State.VERBOSE_LEVEL > 0)
+            Debug.Log("ENTER SPECIAL1");
         this.context.isPressedPunch2 = false;
-        this.context.cmdPlaySound(this.context.getCharacterEnum(), CharacterAudioEnum.Punch);
+        this.context.characterCommandGiver.cmdPlaySound(this.context.getCharacterEnum(), AnimationEnum.Special1);
         this.context.animator.Play(AnimationEnum.Special1.ToString());
-        this.context.cmdInvokeSpecial1(this.context.getCharacterEnum());
+        this.context.characterCommandGiver.cmdInvokeSpecial1(this.context.getCharacterEnum());
 
     }
 
