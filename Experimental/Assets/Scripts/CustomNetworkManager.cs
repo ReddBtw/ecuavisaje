@@ -7,7 +7,15 @@ public class CustomNetworkManager : NetworkManager
 {
     public static int COUNTER = 0;
 
-    public override void OnServerAddPlayer(NetworkConnection conn){
+    public override void OnClientConnect(NetworkConnection conn){
+       base.OnClientConnect(conn);
+ 
+       Debug.Log("I connected to server");
+ 
+ 
+   }
+
+   public override void OnServerAddPlayer(NetworkConnection conn){
        base.OnServerAddPlayer(conn);
 
        CustomNetworkManager.COUNTER += 1;
