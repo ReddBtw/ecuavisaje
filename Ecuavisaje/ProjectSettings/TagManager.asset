@@ -9,6 +9,7 @@ TagManager:
   - NetworkRoomManager
   - PuntoInicial
   - Personaje
+  - NombrePersonaje
   layers:
   - Default
   - TransparentFX
