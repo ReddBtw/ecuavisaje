@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using TMPro;
 public class SelectCharacter : MonoBehaviour
 {
     Vector3 target_Rot;
@@ -32,10 +32,6 @@ public class SelectCharacter : MonoBehaviour
             current_angle = transform.eulerAngles;
             //Actualizo el ángulo de giro
             target_Rot += new Vector3(0, 360 / totalCharacters, 0);
-            Debug.Log("---------------Tecla: Izquierda---------------");
-            Debug.Log("target_Rot: " + target_Rot);
-            Debug.Log("current_angle: " + current_angle);
-            Debug.Log("giros completos: " + giroCompleto);
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
@@ -44,10 +40,6 @@ public class SelectCharacter : MonoBehaviour
             current_angle = transform.eulerAngles;
             //Actualizo el ángulo de giro
             target_Rot -= new Vector3(0, 360 / totalCharacters, 0);
-            Debug.Log("---------------Tecla: Derecha---------------");
-            Debug.Log("target_Rot: " + target_Rot);
-            Debug.Log("current_angle: " + current_angle);
-            Debug.Log("giros completos: " + giroCompleto);
         }
         /* Actulizo el ángulo de rotación */
         current_angle = new Vector3(0, Mathf.LerpAngle(current_angle.y, target_Rot.y, Time.deltaTime * 2), 0);
@@ -73,7 +65,6 @@ public class SelectCharacter : MonoBehaviour
             }
         }
     }
-
     /* Objeto con distancia más corta a la cámara */
     public GameObject GetClosestObject()
     {
@@ -99,7 +90,8 @@ public class SelectCharacter : MonoBehaviour
         {
             giroCompleto = true;
         }
-        Debug.Log("Objeto mas cercano: " + closest.name);
+        TMPro.TextMeshProUGUI personaje = GameObject.FindGameObjectWithTag("NombrePersonaje").GetComponent<TMPro.TextMeshProUGUI>();
+        personaje.text = closest.name;
         return closest;
     }
 

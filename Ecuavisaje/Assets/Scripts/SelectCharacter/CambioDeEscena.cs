@@ -2,25 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 public class CambioDeEscena : MonoBehaviour
 {
     public GameObject personaje;
-    public Transform puntoInicial = null;
+    public Transform puntoInicial;
     private void Start()
     {
-        /* Se ubica al personaje en un punto especificado en la nueva escena */
         personaje = GameObject.FindGameObjectWithTag("Player");
-        Debug.Log("Personaje: " + personaje);
         puntoInicial = GameObject.FindGameObjectWithTag("PuntoInicial").transform;
-        Debug.Log("PuntoInicial: " + puntoInicial);
+        MoverAlPuntoInicial();
+    }
+
+    private void MoverAlPuntoInicial()
+    {
         personaje.transform.position = puntoInicial.position;
     }
 
-    private void update()
+    private void Update()
+    {
+        TestCambioDeEscena();
+    }
+
+    public void TestCambioDeEscena()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            SceneManager.LoadScene("SelectCharacter");
+            if (SceneManager.GetActiveScene().name == "SelectCharacter")
+            {
+                SceneManager.LoadScene("PrimeraEscena");
+            }
+            else if (SceneManager.GetActiveScene().name == "PrimeraEscena")
+            {
+                GameObject player = GameObject.FindGameObjectWithTag("Player");
+                Destroy(player);
+                SceneManager.LoadScene("SelectCharacter");
+            }
         }
     }
 }
