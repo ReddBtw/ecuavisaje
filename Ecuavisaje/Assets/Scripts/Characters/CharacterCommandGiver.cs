@@ -104,9 +104,6 @@ public class CharacterCommandGiver : NetworkBehaviour
         // todo: optimice with hashing?
         // todo: repair play audio
 
-
-
-        Debug.Log("Debug RPC");
         foreach (Character character in this.characters)
         {
             if(character.characterEnum == characterEnum){
@@ -126,6 +123,16 @@ public class CharacterCommandGiver : NetworkBehaviour
             }            
         }
         
+        
+    }
+
+    [ClientRpc]
+    public void rpcTest(string message){
+        if(message == ""){
+            Debug.Log("CharacterCommandGiver.rpcTest: isLocalPlayer-" + isLocalPlayer + " hasAuthority-" + hasAuthority + ". NetworkServer.active-" + NetworkServer.active);
+        }else{
+            Debug.Log(message);
+        }
         
     }
         
