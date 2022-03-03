@@ -17,6 +17,7 @@ public class CambioDeEscena : MonoBehaviour
     private void MoverAlPuntoInicial()
     {
         personaje.transform.position = puntoInicial.position;
+        personaje.transform.eulerAngles = puntoInicial.eulerAngles;
     }
 
     private void Update()
