@@ -18,14 +18,19 @@ public class NetworkPlayer : NetworkBehaviour
     public GameObject opponent {get; set;}
 
 
-    [SerializeField] private Character[] characters = new Character[0];
+    private List<Character> characters;
 
-    #region GettersSetters
+    // Linking Network Player with Main Character instance script
+    private CharacterStateMachine characterCurrent; 
 
-    public Character[] getCharacters(){
-        return this.characters;
+
+    public CharacterStateMachine getCharacterStateMachine(){
+        return this.characterCurrent;
     }
-    #endregion
+
+    private void Awake() {
+        this.characters = UtilsResources.getScriptableObjectsCharacters();
+    }
 
     #region Server
 
@@ -47,7 +52,6 @@ public class NetworkPlayer : NetworkBehaviour
     
     [Command]
     public void cmdSetCharacter(CharacterEnum characterEnum){
-        this.characterEnum = characterEnum;
 
         Character characterSelected = null;
         foreach (Character character in this.characters)
@@ -64,6 +68,11 @@ public class NetworkPlayer : NetworkBehaviour
             Instantiate(characterSelected.characterPrefab, connectionToClient.identity.transform.position, connectionToClient.identity.transform.rotation);
 
         NetworkServer.Spawn(characterInstance, connectionToClient);
+
+
+        // call the hook in player to say: I instantiated your character
+        this.characterEnum = characterEnum;
+        this.characterCurrent = characterInstance.GetComponent<CharacterStateMachine>();
     }
 
     #endregion
@@ -115,6 +124,18 @@ public class NetworkPlayer : NetworkBehaviour
     private void handleUpdateCharacterEnum(CharacterEnum oldValue, CharacterEnum newValue)
     {
         this.characterEnum = newValue;
+
+        CharacterStateMachine[] gameObjectCharacters = GameObject.FindObjectsOfType<CharacterStateMachine>();
+        foreach (var item in gameObjectCharacters)
+        {
+            if(item.hasAuthority){
+                // if i has authority, is my character
+                // in other players will be null
+                this.characterCurrent = item;
+            }
+            
+        }
+        
 
     } 
 

@@ -43,6 +43,8 @@ public class CharacterStateMachine : NetworkBehaviour
     public CharacterCommandGiver characterCommandGiver {get; set;}
     public Health health {get; set;}
 
+    private CutSceneController cutSceneController;
+
     private List<Character> characters;  
     
     [Header("Character config")]
@@ -106,6 +108,8 @@ public class CharacterStateMachine : NetworkBehaviour
 
     void Start(){
 
+        if(!hasAuthority) return;
+
         this.characters = UtilsResources.getScriptableObjectsCharacters();
 
         foreach (Character character in this.characters)
@@ -139,6 +143,11 @@ public class CharacterStateMachine : NetworkBehaviour
         
         this.stateCurrent = this.stateFactory.createGrounded();
         this.stateCurrent.enter();
+
+        this.cutSceneController = GameObject.FindObjectOfType<CutSceneController>();
+        
+
+
     }
 
     [ClientCallback]
@@ -203,6 +212,7 @@ public class CharacterStateMachine : NetworkBehaviour
 
     [ClientCallback]
     private void FixedUpdate() {
+        if(!hasAuthority) return;
         RaycastHit raycastHit;
         if(Physics.Raycast(this.transform.position, Vector3.down, out raycastHit, 0.5f, this.groundMask)){
             isGrounded = true;
@@ -225,6 +235,7 @@ public class CharacterStateMachine : NetworkBehaviour
         if(!hasAuthority) return;
         this.isAttacking = true;
         this.isPressedPunch1 = true;
+        this.cutSceneController.cmdAnimation();
     }
 
     private void punch2(InputAction.CallbackContext context){
