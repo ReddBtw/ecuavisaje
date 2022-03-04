@@ -52,7 +52,7 @@ public class NetworkPlayer : NetworkBehaviour
     
     [Command]
     public void cmdSetCharacter(CharacterEnum characterEnum){
-
+        Debug.Log("CREATING: " + characterEnum);
         Character characterSelected = null;
         foreach (Character character in this.characters)
         {
@@ -84,17 +84,18 @@ public class NetworkPlayer : NetworkBehaviour
 
         try{
         	if(((EcNetworkRoomManager)NetworkManager.singleton).players.Count > 0){
-            this.cmdSetCharacter(CharacterEnum.Lasso);
-        }
-        else{
-            this.cmdSetCharacter(CharacterEnum.Conserje);
+                this.cmdSetCharacter(CharacterEnum.RonAlkonso);
+            }
+            else{
+                this.cmdSetCharacter(CharacterEnum.Lasso);
 
-        }
+            }
         
         }
         catch (Exception)
         {
-        	this.cmdSetCharacter(CharacterEnum.Lasso);
+            // Debug.Log("Selecting default");
+        	this.cmdSetCharacter(CharacterEnum.RonAlkonso);
         }
         
 

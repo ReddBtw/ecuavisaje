@@ -7,7 +7,8 @@ public enum CharacterEnum
 {
     None,
     Lasso,
-    Conserje
+    Conserje,
+    RonAlkonso
 }
 
 public enum AnimationEnum
@@ -20,7 +21,7 @@ public enum AnimationEnum
 
 public enum SkillType
 {
-    normal, throw_object
+    normal, throw_object, invocable
 }
 
 [Serializable]
@@ -29,6 +30,8 @@ public enum SkillType
     public GameObject gameObjectPrefab;
     public AudioClip audio;
     public float damage;
+    public float attackRange;
+    public Vector3 startPositionOffset; // position to sum, relative to character
 }
 
 [CreateAssetMenu(menuName = "Character")]
@@ -40,6 +43,8 @@ public class Character: ScriptableObject
     [SerializeField] public string description;
     [SerializeField] public Skill punch1;
     [SerializeField] public Skill special1;
+    [SerializeField] public Skill special2;
+    [SerializeField] public Skill ultimate;
 
 
 }

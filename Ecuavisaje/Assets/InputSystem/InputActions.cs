@@ -107,6 +107,33 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""DebugSpecial1"",
+                    ""type"": ""Button"",
+                    ""id"": ""0b023846-7ab3-4040-b50d-66453757e246"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DebugSpecial2"",
+                    ""type"": ""Button"",
+                    ""id"": ""51dcd4c4-0206-4888-b7de-545cf6ce7825"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DebugUltimate"",
+                    ""type"": ""Button"",
+                    ""id"": ""2f32ccb3-b621-402f-91a4-91cbc852e741"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -208,6 +235,39 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""action"": ""Block"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9e73202f-35f5-464f-8e64-6ad1bccf142e"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""DebugSpecial1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""564e9906-5c4f-48a8-a108-c740e1106147"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""DebugSpecial2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""25cce6ac-f0e8-42e6-b9f5-5955534d0948"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""DebugUltimate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -231,6 +291,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         m_Player_Kick1 = m_Player.FindAction("Kick1", throwIfNotFound: true);
         m_Player_Kick2 = m_Player.FindAction("Kick2", throwIfNotFound: true);
         m_Player_Block = m_Player.FindAction("Block", throwIfNotFound: true);
+        m_Player_DebugSpecial1 = m_Player.FindAction("DebugSpecial1", throwIfNotFound: true);
+        m_Player_DebugSpecial2 = m_Player.FindAction("DebugSpecial2", throwIfNotFound: true);
+        m_Player_DebugUltimate = m_Player.FindAction("DebugUltimate", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -299,6 +362,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Kick1;
     private readonly InputAction m_Player_Kick2;
     private readonly InputAction m_Player_Block;
+    private readonly InputAction m_Player_DebugSpecial1;
+    private readonly InputAction m_Player_DebugSpecial2;
+    private readonly InputAction m_Player_DebugUltimate;
     public struct PlayerActions
     {
         private @InputActions m_Wrapper;
@@ -312,6 +378,9 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         public InputAction @Kick1 => m_Wrapper.m_Player_Kick1;
         public InputAction @Kick2 => m_Wrapper.m_Player_Kick2;
         public InputAction @Block => m_Wrapper.m_Player_Block;
+        public InputAction @DebugSpecial1 => m_Wrapper.m_Player_DebugSpecial1;
+        public InputAction @DebugSpecial2 => m_Wrapper.m_Player_DebugSpecial2;
+        public InputAction @DebugUltimate => m_Wrapper.m_Player_DebugUltimate;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -348,6 +417,15 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @Block.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBlock;
                 @Block.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBlock;
                 @Block.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnBlock;
+                @DebugSpecial1.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDebugSpecial1;
+                @DebugSpecial1.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDebugSpecial1;
+                @DebugSpecial1.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDebugSpecial1;
+                @DebugSpecial2.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDebugSpecial2;
+                @DebugSpecial2.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDebugSpecial2;
+                @DebugSpecial2.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDebugSpecial2;
+                @DebugUltimate.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDebugUltimate;
+                @DebugUltimate.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDebugUltimate;
+                @DebugUltimate.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDebugUltimate;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -379,6 +457,15 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                 @Block.started += instance.OnBlock;
                 @Block.performed += instance.OnBlock;
                 @Block.canceled += instance.OnBlock;
+                @DebugSpecial1.started += instance.OnDebugSpecial1;
+                @DebugSpecial1.performed += instance.OnDebugSpecial1;
+                @DebugSpecial1.canceled += instance.OnDebugSpecial1;
+                @DebugSpecial2.started += instance.OnDebugSpecial2;
+                @DebugSpecial2.performed += instance.OnDebugSpecial2;
+                @DebugSpecial2.canceled += instance.OnDebugSpecial2;
+                @DebugUltimate.started += instance.OnDebugUltimate;
+                @DebugUltimate.performed += instance.OnDebugUltimate;
+                @DebugUltimate.canceled += instance.OnDebugUltimate;
             }
         }
     }
@@ -403,5 +490,8 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
         void OnKick1(InputAction.CallbackContext context);
         void OnKick2(InputAction.CallbackContext context);
         void OnBlock(InputAction.CallbackContext context);
+        void OnDebugSpecial1(InputAction.CallbackContext context);
+        void OnDebugSpecial2(InputAction.CallbackContext context);
+        void OnDebugUltimate(InputAction.CallbackContext context);
     }
 }

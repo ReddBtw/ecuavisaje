@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15a0f505435358fbcb93f16d1af27486, type: 3}
+  m_Name: CharacterRonAlkonso
+  m_EditorClassIdentifier: 
+  icon: {fileID: 0}
+  characterEnum: 3
+  characterPrefab: {fileID: 7464046643535690077, guid: 7c628ce309220d0e7925e596cdf4accf, type: 3}
+  description: Dios
+  punch1:
+    skillType: 0
+    gameObjectPrefab: {fileID: 0}
+    audio: {fileID: 8300000, guid: bb4fe015486f8ee65921a7bb2b4565ef, type: 3}
+    damage: 20
+    attackRange: 0
+    startPositionOffset: {x: 0, y: 0, z: 0}
+  special1:
+    skillType: 1
+    gameObjectPrefab: {fileID: 8716425560517441340, guid: 24097c66091951f518aafd687715b94f, type: 3}
+    audio: {fileID: 8300000, guid: bb4fe015486f8ee65921a7bb2b4565ef, type: 3}
+    damage: 10
+    attackRange: 0
+    startPositionOffset: {x: 0, y: 0, z: 0}
+  special2:
+    skillType: 2
+    gameObjectPrefab: {fileID: 7896127331890715153, guid: c82af8dda639c03cdaf97b0adf6de59e, type: 3}
+    audio: {fileID: 8300000, guid: 4e159ae79119ccd2ab73ea1a54371833, type: 3}
+    damage: 20
+    attackRange: 8
+    startPositionOffset: {x: -3, y: 5, z: 0}
+  ultimate:
+    skillType: 2
+    gameObjectPrefab: {fileID: 6070835259615005517, guid: f2e3189eb135910f6b8adedda69d4635, type: 3}
+    audio: {fileID: 8300000, guid: aaafdd3e4fdc9c9619528e03909a49e4, type: 3}
+    damage: 50
+    attackRange: 0
+    startPositionOffset: {x: 0, y: 0, z: 0}

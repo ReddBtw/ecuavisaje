@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class Special1 : NetworkBehaviour
+public class Special1 : SkillObject
 {
     [SerializeField] float forceBegin = 2f;
-    [SerializeField] float damage = 10f;
-    public Collider ignoreCollider;
 
     
     void Start()

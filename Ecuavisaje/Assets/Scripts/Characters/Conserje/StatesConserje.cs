@@ -37,6 +37,14 @@ public class StateFactoryConserje: StateFactory{
     {
         return new StateConserjePunch1(this.stateMachine, this);
     }
+    public override State createSpecial2()
+    {
+        return new StateConserjePunch1(this.stateMachine, this);
+    }
+    public override State createUltimate()
+    {
+        return new StateConserjePunch1(this.stateMachine, this);
+    }
 
 
 }
