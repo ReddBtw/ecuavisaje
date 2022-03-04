@@ -47,7 +47,7 @@ public class CharacterStateMachine : NetworkBehaviour
     public CharacterCommandGiver characterCommandGiver {get; set;}
     public Health health {get; set;}
 
-    private CutSceneController cutSceneController;
+    public CutSceneController cutSceneController {get; set;}
 
     private List<Character> characters;  
     
@@ -84,7 +84,13 @@ public class CharacterStateMachine : NetworkBehaviour
 
     public override void OnStartClient()
     {
-        if(!hasAuthority) return;
+        if(!hasAuthority){
+            // execute in others locally
+            this.gameObject.layer = LayerMask.NameToLayer("Enemy");
+            return;
+        }
+
+        this.gameObject.layer = LayerMask.NameToLayer("Ally");
 
         this.inputActions = new InputActions();
         this.inputActions.Player.Enable();
@@ -107,6 +113,10 @@ public class CharacterStateMachine : NetworkBehaviour
         this.inputActions.Player.Disable();
         this.inputActions.Player.Jump.performed -= this.jump;
         this.inputActions.Player.Punch1.performed -= this.punch1;
+        this.inputActions.Player.Punch2.performed -= this.punch2;
+        this.inputActions.Player.DebugSpecial1.performed -= this.debugSpecial1;
+        this.inputActions.Player.DebugSpecial2.performed -= this.debugSpecial2;
+        this.inputActions.Player.DebugUltimate.performed -= this.debugUltimate;
 
         
     }
@@ -114,6 +124,11 @@ public class CharacterStateMachine : NetworkBehaviour
 
 
     void Start(){
+
+        this.characterCommandGiver = this.GetComponent<CharacterCommandGiver>();
+        this.health = this.GetComponent<Health>();
+        this.animator = this.GetComponent<Animator>();
+        this.cutSceneController = GameObject.FindObjectOfType<CutSceneController>();
 
         if(!hasAuthority) return;
 
@@ -126,9 +141,6 @@ public class CharacterStateMachine : NetworkBehaviour
             }
         }
 
-        this.characterCommandGiver = this.GetComponent<CharacterCommandGiver>();
-        this.health = this.GetComponent<Health>();
-        this.animator = this.GetComponent<Animator>();
         this.side = 0;
         this.side_last = -1;
         this.side = this.side_last;
@@ -154,7 +166,6 @@ public class CharacterStateMachine : NetworkBehaviour
         this.stateCurrent = this.stateFactory.createGrounded();
         this.stateCurrent.enter();
 
-        this.cutSceneController = GameObject.FindObjectOfType<CutSceneController>();
         
 
 

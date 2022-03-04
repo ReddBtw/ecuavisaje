@@ -82,6 +82,8 @@ public class NetworkPlayer : NetworkBehaviour
     {
         if(!hasAuthority) { return; }
 
+        
+
         try{
         	if(((EcNetworkRoomManager)NetworkManager.singleton).players.Count > 0){
                 this.cmdSetCharacter(CharacterEnum.RonAlkonso);
@@ -95,7 +97,7 @@ public class NetworkPlayer : NetworkBehaviour
         catch (Exception)
         {
             // Debug.Log("Selecting default");
-        	this.cmdSetCharacter(CharacterEnum.RonAlkonso);
+        	this.cmdSetCharacter(CharacterEnum.Lasso);
         }
         
 

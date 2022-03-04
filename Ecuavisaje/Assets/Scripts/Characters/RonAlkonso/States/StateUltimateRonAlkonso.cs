@@ -1,8 +1,11 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using Mirror;
 
 public class StateUltimateRonAlkonso : State
 {
-    public float timerDuration = 1f;
+    public float timerDuration = 5f;
     protected LayerMask layerPlayer;
 
     public StateUltimateRonAlkonso(CharacterStateMachine context, StateFactory factory):base(context,factory){
@@ -14,9 +17,25 @@ public class StateUltimateRonAlkonso : State
         if(State.VERBOSE_LEVEL > 0)
             Debug.Log("ENTER SPECIAL1");
         this.context.isActivatedUltimate = false;
+        this.context.isAttacking = true; // todo: remove duplicate
         this.context.characterCommandGiver.cmdPlaySound(this.context.getCharacterEnum(), AnimationEnum.Ultimate);
-        this.context.animator.Play(AnimationEnum.Ultimate.ToString());
-        // this.context.characterCommandGiver.cmdInvokeSpecial1(this.context.getCharacterEnum());
+        this.context.characterCommandGiver.cmdUltimate(this.context.getCharacterEnum());
+    }
+
+
+    public static void callbackUltimate(CharacterStateMachine context){
+        // called on server
+        context.StartCoroutine(ultimate(context));
+    }
+
+    public static IEnumerator ultimate(CharacterStateMachine context){
+        // called on server
+        yield return null;
+        context.cutSceneController.cmdAnimation();
+        yield return new WaitForSeconds(1f);
+        context.animator.Play(AnimationEnum.Ultimate.ToString());
+        yield return new WaitForSeconds(1f);
+        context.animator.Play(AnimationEnum.Punch1.ToString());
 
     }
 
@@ -36,6 +55,7 @@ public class StateUltimateRonAlkonso : State
     public override void checkSwitchStates()
     {
         if(!this.context.isAttacking){
+            Debug.Log("SWITCHING FROM ULTIMATE TO " + this.context.isMoving);
             if(this.context.isMoving){
                 this.switchState(this.factory.createWalk());
             }

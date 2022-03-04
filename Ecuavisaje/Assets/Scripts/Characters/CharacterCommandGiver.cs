@@ -109,6 +109,11 @@ public class CharacterCommandGiver : NetworkBehaviour
         }
     }
 
+    [Command]
+    public void cmdUltimate(CharacterEnum characterEnum){
+        StateUltimateRonAlkonso.callbackUltimate(this.characterStateMachine);
+    }
+
     
 
     #endregion
