@@ -66,28 +66,44 @@ public class CharacterCommandGiver : NetworkBehaviour
 
 
     [Command]
-    public void cmdInvokeSpecial1(CharacterEnum characterEnum){
+    public void cmdInvokeSpecial(CharacterEnum characterEnum, int specialId){
+
+        int directionLooking = (this.transform.rotation.eulerAngles.y > 180)? -1: 1;
+        // to left=-1, to right=1
 
         foreach (Character character in this.characters)
         {   
             if(character.characterEnum == characterEnum){
-                if(character.special1.skillType == SkillType.throw_object){
-                    
-                    Vector3 vectorPosition = new Vector3(this.transform.position.x+2,this.transform.position.y+4,this.transform.position.z);
-                    Quaternion rotation = Quaternion.Euler(
-                        character.special1.gameObjectPrefab.transform.rotation.x, 
-                        90, // this.transform.rotation.y not working todo: why? 
-                        -90
 
-                    );
-
-
-
-                    GameObject instantiateSpecial1 = Instantiate(character.special1.gameObjectPrefab, vectorPosition, rotation);
-                    instantiateSpecial1.GetComponent<Special1>().ignoreCollider = this.GetComponent<CapsuleCollider>();
-                    
-                    NetworkServer.Spawn(instantiateSpecial1, this.connectionToClient);
+                Skill special = character.special1;
+                if(specialId == 2){
+                    special = character.special2;
                 }
+
+                Vector3 vectorPosition = this.transform.position;
+
+                if(special.skillType == SkillType.throw_object){
+                    vectorPosition = new Vector3(this.transform.position.x+(3*directionLooking),this.transform.position.y+4,this.transform.position.z);
+                    
+                }
+                else if(special.skillType == SkillType.invocable){
+                    vectorPosition = new Vector3(this.transform.position.x+(special.startPositionOffset.x*directionLooking),this.transform.position.y+special.startPositionOffset.y,this.transform.position.z); 
+
+                }
+
+                Quaternion rotation = Quaternion.Euler(
+                    special.gameObjectPrefab.transform.rotation.eulerAngles.x,
+                    special.gameObjectPrefab.transform.rotation.eulerAngles.y + ((directionLooking<0)? -90:90),
+                    special.gameObjectPrefab.transform.rotation.eulerAngles.z
+
+                );
+
+                GameObject instantiateSpecial = Instantiate(special.gameObjectPrefab, vectorPosition, rotation);
+                instantiateSpecial.GetComponent<SkillObject>().ignoreCollider = this.GetComponent<CapsuleCollider>();
+                instantiateSpecial.GetComponent<SkillObject>().damage = special.damage;
+                instantiateSpecial.GetComponent<SkillObject>().directionLooking = directionLooking;
+                instantiateSpecial.GetComponent<SkillObject>().attackRange = special.attackRange;
+                NetworkServer.Spawn(instantiateSpecial, this.connectionToClient);
             }
             
         }

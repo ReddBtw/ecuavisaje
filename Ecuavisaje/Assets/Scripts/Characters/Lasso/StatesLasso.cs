@@ -37,6 +37,14 @@ public class StateFactoryLasso: StateFactory{
     {
         return new StateLassoSpecial1(this.stateMachine, this);
     }
+    public override State createSpecial2()
+    {
+        return new StateLassoSpecial1(this.stateMachine, this);
+    }
+    public override State createUltimate()
+    {
+        return new StateLassoSpecial1(this.stateMachine, this);
+    }
 
 
 }
@@ -101,7 +109,7 @@ public class StateLassoSpecial1 : State
         this.context.isPressedPunch2 = false;
         this.context.characterCommandGiver.cmdPlaySound(this.context.getCharacterEnum(), AnimationEnum.Special1);
         this.context.animator.Play(AnimationEnum.Special1.ToString());
-        this.context.characterCommandGiver.cmdInvokeSpecial1(this.context.getCharacterEnum());
+        this.context.characterCommandGiver.cmdInvokeSpecial(this.context.getCharacterEnum(), 1);
 
     }
 

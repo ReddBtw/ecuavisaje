@@ -38,6 +38,10 @@ public class CharacterStateMachine : NetworkBehaviour
     public bool isPressedPunch1 = false;
     public bool isPressedPunch2 = false;
 
+    public bool isActivatedSpecial1 = false;
+    public bool isActivatedSpecial2 = false;
+    public bool isActivatedUltimate = false;
+
     
     public Animator animator {get;set;}
     public CharacterCommandGiver characterCommandGiver {get; set;}
@@ -87,10 +91,13 @@ public class CharacterStateMachine : NetworkBehaviour
         this.inputActions.Player.Jump.performed += this.jump;
         this.inputActions.Player.Punch1.performed += this.punch1;
         this.inputActions.Player.Punch2.performed += this.punch2;
+        this.inputActions.Player.DebugSpecial1.performed += this.debugSpecial1;
+        this.inputActions.Player.DebugSpecial2.performed += this.debugSpecial2;
+        this.inputActions.Player.DebugUltimate.performed += this.debugUltimate;
 
         this.player = NetworkClient.connection.identity.GetComponent<NetworkPlayer>();
 
-        Debug.Log("Net id: " + this.player.netId + ". Has: " + this.player.hasAuthority);
+        // Debug.Log("Net id: " + this.player.netId + ". Has: " + this.player.hasAuthority);
     }
 
      public override void OnStopClient()
@@ -135,6 +142,9 @@ public class CharacterStateMachine : NetworkBehaviour
                 break;
             case CharacterEnum.Conserje:
                 this.stateFactory = new StateFactoryConserje(this);
+                break;
+            case CharacterEnum.RonAlkonso:
+                this.stateFactory = new StateFactoryRonAlkonso(this);
                 break;
             default:
                 throw new System.Exception("CharacterEnum invalid");
@@ -235,13 +245,29 @@ public class CharacterStateMachine : NetworkBehaviour
         if(!hasAuthority) return;
         this.isAttacking = true;
         this.isPressedPunch1 = true;
-        this.cutSceneController.cmdAnimation();
     }
 
     private void punch2(InputAction.CallbackContext context){
         if(!hasAuthority) return;
         this.isAttacking = true;
         this.isPressedPunch2 = true;
+    }
+
+    // todo: control this when go to production
+    private void debugSpecial1(InputAction.CallbackContext context){
+        if(!hasAuthority) return;
+        //1
+        this.isActivatedSpecial1 = true;
+    }
+    private void debugSpecial2(InputAction.CallbackContext context){
+        if(!hasAuthority) return;
+        //2
+        this.isActivatedSpecial2 = true;
+    }
+    private void debugUltimate(InputAction.CallbackContext context){
+        if(!hasAuthority) return;
+        //3
+        this.isActivatedUltimate = true;
     }
 
     private void findOpponent(){
