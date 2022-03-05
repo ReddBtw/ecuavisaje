@@ -1319,6 +1319,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1347493218246522649, guid: 81a069c55e369d5b7917cb0b96e6d42d, type: 3}
+      propertyPath: simulationSpeed
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1347493218246522649, guid: 81a069c55e369d5b7917cb0b96e6d42d, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1347493218246522649, guid: 81a069c55e369d5b7917cb0b96e6d42d, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0.8043118
+      objectReference: {fileID: 0}
+    - target: {fileID: 1347493218246522649, guid: 81a069c55e369d5b7917cb0b96e6d42d, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.38823533
+      objectReference: {fileID: 0}
+    - target: {fileID: 1347493218246522649, guid: 81a069c55e369d5b7917cb0b96e6d42d, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0.8862745
+      objectReference: {fileID: 0}
+    - target: {fileID: 1347493218246522655, guid: 81a069c55e369d5b7917cb0b96e6d42d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 59.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 81a069c55e369d5b7917cb0b96e6d42d, type: 3}
 --- !u!4 &7004222588378237745 stripped

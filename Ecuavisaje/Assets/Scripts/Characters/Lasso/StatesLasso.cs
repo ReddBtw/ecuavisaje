@@ -106,7 +106,8 @@ public class StateLassoSpecial1 : State
     {
         if(State.VERBOSE_LEVEL > 0)
             Debug.Log("ENTER SPECIAL1");
-        this.context.isPressedPunch2 = false;
+        this.context.isActivatedSpecial1 = false;
+        this.context.isAttacking = true;
         this.context.characterCommandGiver.cmdPlaySound(this.context.getCharacterEnum(), AnimationEnum.Special1);
         this.context.animator.Play(AnimationEnum.Special1.ToString());
         this.context.characterCommandGiver.cmdInvokeSpecial(this.context.getCharacterEnum(), 1);

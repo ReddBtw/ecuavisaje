@@ -63,14 +63,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7758553537545758315}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d31f1b3a755709298b88ddaace00733, type: 3}
+  m_Script: {fileID: 11500000, guid: 82028aea192df21678bdc6a28f38d592, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  forceBegin: 20
-  damage: 10
-  ignoreCollider: {fileID: 0}
+  forceBegin: 8
 --- !u!114 &-7537780705440290758
 MonoBehaviour:
   m_ObjectHideFlags: 0

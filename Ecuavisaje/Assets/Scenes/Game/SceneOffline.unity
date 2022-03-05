@@ -201,8 +201,8 @@ MonoBehaviour:
   runInBackground: 1
   autoStartServerBuild: 1
   serverTickRate: 30
-  offlineScene: Assets/Scenes/SceneOffline.unity
-  onlineScene: Assets/Scenes/SceneRoom.unity
+  offlineScene: Assets/Scenes/Game/SceneOffline.unity
+  onlineScene: Assets/Scenes/Game/SceneRoom.unity
   transport: {fileID: 171891772}
   networkAddress: localhost
   maxConnections: 4
@@ -214,11 +214,15 @@ MonoBehaviour:
   - {fileID: 8156153236522879344, guid: 1a4fa7fe1812d47dfa4a965053ac004e, type: 3}
   - {fileID: 2142224089039901612, guid: a888349017d2e3ac2a6eac08d4777a39, type: 3}
   - {fileID: 7758553537545758315, guid: 7eacf31edf4b5215cafcc0654af5c079, type: 3}
+  - {fileID: 7464046643535690077, guid: 7c628ce309220d0e7925e596cdf4accf, type: 3}
+  - {fileID: 8716425560517441340, guid: 24097c66091951f518aafd687715b94f, type: 3}
+  - {fileID: 7896127331890715153, guid: c82af8dda639c03cdaf97b0adf6de59e, type: 3}
+  - {fileID: 6070835259615005517, guid: f2e3189eb135910f6b8adedda69d4635, type: 3}
   showRoomGUI: 1
   minPlayers: 1
   roomPlayerPrefab: {fileID: 2267238356811136131, guid: e080a10beca06e780ae57fb7e4bc4160, type: 3}
-  RoomScene: Assets/Scenes/SceneRoom.unity
-  GameplayScene: Assets/Scenes/SceneMain.unity
+  RoomScene: Assets/Scenes/Game/SceneRoom.unity
+  GameplayScene: Assets/Scenes/Game/SceneMain.unity
   _allPlayersReady: 0
   roomSlots: []
   clientIndex: 0

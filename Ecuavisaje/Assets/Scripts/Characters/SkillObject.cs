@@ -9,6 +9,10 @@ public class SkillObject: NetworkBehaviour{
     public float attackRange {get;set;}
 
     public int directionLooking {get;set;} // to left=-1, to right=1
+
+
+    
+
 }
 
 

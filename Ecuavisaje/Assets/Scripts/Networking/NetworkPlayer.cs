@@ -82,6 +82,8 @@ public class NetworkPlayer : NetworkBehaviour
     {
         if(!hasAuthority) { return; }
 
+        
+
         try{
         	if(((EcNetworkRoomManager)NetworkManager.singleton).players.Count > 0){
                 this.cmdSetCharacter(CharacterEnum.RonAlkonso);

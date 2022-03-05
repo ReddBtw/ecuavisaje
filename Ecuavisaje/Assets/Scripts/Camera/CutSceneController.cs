@@ -4,25 +4,29 @@ using UnityEngine;
 using Mirror;
 using Cinemachine;
 
-enum CameraVirtualName
+public enum CameraVirtualName
 {
-    camera1, camera2
+    main, camera1, camera2
 }
 
 public class CutSceneController : NetworkBehaviour
 {
 
     private CinemachineBrain cameraBrain;
-    [SerializeField] CinemachineVirtualCamera camera1;
-    [SerializeField] CinemachineVirtualCamera camera2;
+    [SerializeField] public CinemachineVirtualCamera main;
+    [SerializeField] public CinemachineVirtualCamera camera1;
+    [SerializeField] public CinemachineVirtualCamera camera2;
 
     [SyncVar(hook=nameof(handleCameraVirtualCurrent))]
-    private CameraVirtualName cameraVirtualCurrent;
+    public CameraVirtualName cameraVirtualCurrent;
     
-
+    public void setCamera(CameraVirtualName cameraVirtual){
+        this.cameraVirtualCurrent = cameraVirtual;
+    }
 
     void Awake(){
         this.cameraBrain = this.GetComponent<CinemachineBrain>();
+        this.cameraVirtualCurrent = CameraVirtualName.main;
     }
 
     void Start()
@@ -66,11 +70,19 @@ public class CutSceneController : NetworkBehaviour
         this.cameraVirtualCurrent = valueNew;
         switch (valueNew)
         {
+            case CameraVirtualName.main:
+                main.gameObject.SetActive(true);
+                camera1.gameObject.SetActive(false);
+                camera2.gameObject.SetActive(false);
+                break;
+
             case CameraVirtualName.camera1:
+                main.gameObject.SetActive(false);
                 camera1.gameObject.SetActive(true);
                 camera2.gameObject.SetActive(false);
                 break;
             case CameraVirtualName.camera2:
+                main.gameObject.SetActive(false);
                 camera1.gameObject.SetActive(false);
                 camera2.gameObject.SetActive(true);
                 break;

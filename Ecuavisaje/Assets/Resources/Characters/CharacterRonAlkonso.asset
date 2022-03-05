@@ -43,4 +43,4 @@ MonoBehaviour:
     audio: {fileID: 8300000, guid: aaafdd3e4fdc9c9619528e03909a49e4, type: 3}
     damage: 50
     attackRange: 0
-    startPositionOffset: {x: 0, y: 0, z: 0}
+    startPositionOffset: {x: 0, y: 15, z: 0}

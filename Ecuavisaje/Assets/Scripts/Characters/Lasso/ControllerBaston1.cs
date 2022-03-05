@@ -3,25 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class Special1 : SkillObject
+public class ControllerBaston1 : SkillObject
 {
     [SerializeField] float forceBegin = 2f;
-
+    
+    private BoxCollider boxCollider;
+    public override void OnStartClient()
+    {
+        if(!hasAuthority) return;
+        base.OnStartClient();
+        this.gameObject.layer = LayerMask.NameToLayer("Ally");
+    }
     
     void Start()
     {
+
+        this.boxCollider = this.GetComponent<BoxCollider>();
         Destroy(this.gameObject, 3f);
     }
 
     [Command]
     public void cmdMoveMe(){
-        this.transform.Translate(new Vector3(this.forceBegin * Time.deltaTime, 0, 0), Space.World);
-        this.transform.RotateAround(
-            this.GetComponent<BoxCollider>().bounds.center,
-            new Vector3(1,0,0),
-            500 * Time.deltaTime
+        this.transform.Translate(new Vector3(this.forceBegin * this.directionLooking * Time.deltaTime, 0, 0), Space.World);
         
+        this.transform.RotateAround(
+            boxCollider.bounds.center,
+            new Vector3(1,0,0),
+            100 * Time.deltaTime
         );
+        
     }
 
     [ClientCallback]
