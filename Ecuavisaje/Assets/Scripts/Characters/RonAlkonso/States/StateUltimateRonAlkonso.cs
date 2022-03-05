@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Mirror;
+using Cinemachine;
 
 public class StateUltimateRonAlkonso : State
 {
@@ -30,12 +31,75 @@ public class StateUltimateRonAlkonso : State
 
     public static IEnumerator ultimate(CharacterStateMachine context){
         // called on server
-        yield return null;
-        context.cutSceneController.cmdAnimation();
-        yield return new WaitForSeconds(1f);
+        GameObject sender = context.gameObject;
+
+        CutSceneController cutSceneController = context.cutSceneController;
+
+
+        context.characterCommandGiver.rpcTest("SCENE1");
+        cutSceneController.setCamera(CameraVirtualName.camera1);
+
+        // this.rpcTest("BEGIN ANIMATION");
+        Vector3 position1 = new Vector3(
+            sender.transform.position.x, 
+            sender.transform.position.y+7, 
+            sender.transform.position.z-10f
+        );
+
+        float velocityZoom = 3f;
+        
         context.animator.Play(AnimationEnum.Ultimate.ToString());
-        yield return new WaitForSeconds(1f);
+        while (Vector3.Distance(cutSceneController.camera1.transform.position, position1) > 0.5f)
+        {
+            cutSceneController.camera1.transform.position = Vector3.Lerp(cutSceneController.camera1.transform.position, position1, velocityZoom * Time.deltaTime);
+            yield return null;
+        }
+        context.characterCommandGiver.rpcTest("SCENE2");
+        yield return new WaitForSeconds(0.5f);
+        cutSceneController.setCamera(CameraVirtualName.camera2);
         context.animator.Play(AnimationEnum.Punch1.ToString());
+        context.characterCommandGiver.rpcTest("SCENE_ULTIMATE");
+        yield return new WaitForSeconds(0.5f);
+        cutSceneController.setCamera(CameraVirtualName.main);
+        context.animator.Play(AnimationEnum.Kick1.ToString());
+        cutSceneController.camera1.transform.position = cutSceneController.main.transform.position;
+
+        int directionLooking = (context.transform.rotation.eulerAngles.y > 180)? -1: 1;
+        // to left=-1, to right=1
+
+        foreach (Character character in context.characters)
+        {   
+            if(character.characterEnum == context.getCharacterEnum()){
+
+                Skill ultimate = character.ultimate;
+
+                Vector3 vectorPosition = context.transform.position;
+
+                if(ultimate.skillType == SkillType.throw_object){
+                    vectorPosition = new Vector3(context.transform.position.x+(3*directionLooking),context.transform.position.y+4,context.transform.position.z);
+                    
+                }
+                else if(ultimate.skillType == SkillType.invocable){
+                    vectorPosition = new Vector3(context.transform.position.x+(ultimate.startPositionOffset.x*directionLooking),context.transform.position.y+ultimate.startPositionOffset.y,context.transform.position.z); 
+
+                }
+
+                Quaternion rotation = Quaternion.Euler(
+                    ultimate.gameObjectPrefab.transform.rotation.eulerAngles.x,
+                    ultimate.gameObjectPrefab.transform.rotation.eulerAngles.y + ((directionLooking<0)? -90:90),
+                    ultimate.gameObjectPrefab.transform.rotation.eulerAngles.z
+
+                );
+                CinemachineBasicMultiChannelPerlin basicMultiChannelPerlin = cutSceneController.main.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+                basicMultiChannelPerlin.m_AmplitudeGain = 5;
+                context.characterCommandGiver.instantiateSkillObject(ultimate, vectorPosition, rotation, directionLooking);
+                yield return new WaitForSeconds(3f);
+                basicMultiChannelPerlin.m_AmplitudeGain = 0;
+                break;
+            }
+            
+        }
+        context.characterCommandGiver.rpcTest("SCENE_END");
 
     }
 

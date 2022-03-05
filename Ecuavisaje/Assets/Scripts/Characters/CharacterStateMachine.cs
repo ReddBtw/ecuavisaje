@@ -49,7 +49,7 @@ public class CharacterStateMachine : NetworkBehaviour
 
     public CutSceneController cutSceneController {get; set;}
 
-    private List<Character> characters;  
+    public List<Character> characters;
     
     [Header("Character config")]
     [SerializeField] private CharacterEnum characterEnum = CharacterEnum.None;

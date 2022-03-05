@@ -97,7 +97,7 @@ public class NetworkPlayer : NetworkBehaviour
         catch (Exception)
         {
             // Debug.Log("Selecting default");
-        	this.cmdSetCharacter(CharacterEnum.Lasso);
+        	this.cmdSetCharacter(CharacterEnum.RonAlkonso);
         }
         
 

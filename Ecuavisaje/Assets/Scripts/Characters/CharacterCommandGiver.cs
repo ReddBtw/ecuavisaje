@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(AudioSource))]
@@ -63,6 +64,20 @@ public class CharacterCommandGiver : NetworkBehaviour
         }
     }
 
+    [Server]
+    public void instantiateSkillObject(
+        Skill skill, 
+        Vector3 prefabPosition, 
+        Quaternion prefabRotation,
+        int directionLooking
+    ){
+        GameObject instantiateSpecial = Instantiate(skill.gameObjectPrefab, prefabPosition, prefabRotation);
+        instantiateSpecial.GetComponent<SkillObject>().ignoreCollider = this.GetComponent<CapsuleCollider>();
+        instantiateSpecial.GetComponent<SkillObject>().damage = skill.damage;
+        instantiateSpecial.GetComponent<SkillObject>().directionLooking = directionLooking;
+        instantiateSpecial.GetComponent<SkillObject>().attackRange = skill.attackRange;
+        NetworkServer.Spawn(instantiateSpecial, this.connectionToClient);
+    }
 
 
     [Command]
@@ -98,12 +113,14 @@ public class CharacterCommandGiver : NetworkBehaviour
 
                 );
 
-                GameObject instantiateSpecial = Instantiate(special.gameObjectPrefab, vectorPosition, rotation);
-                instantiateSpecial.GetComponent<SkillObject>().ignoreCollider = this.GetComponent<CapsuleCollider>();
-                instantiateSpecial.GetComponent<SkillObject>().damage = special.damage;
-                instantiateSpecial.GetComponent<SkillObject>().directionLooking = directionLooking;
-                instantiateSpecial.GetComponent<SkillObject>().attackRange = special.attackRange;
-                NetworkServer.Spawn(instantiateSpecial, this.connectionToClient);
+                this.instantiateSkillObject(special, vectorPosition,rotation, directionLooking);
+
+                if(character.characterEnum == CharacterEnum.RonAlkonso && specialId == 2){
+
+                    this.rpcShowJojo();
+                }
+
+                
             }
             
         }
@@ -119,6 +136,19 @@ public class CharacterCommandGiver : NetworkBehaviour
     #endregion
 
     #region RPC
+
+    [ClientRpc]
+    public void rpcShowJojo(){
+        StartCoroutine(test());
+    }
+
+    private IEnumerator test(){
+        GameObject gameObject = GameObject.FindGameObjectWithTag("ImagePower");
+        gameObject.GetComponent<RawImage>().enabled = true;
+        yield return new WaitForSeconds(1f);
+        gameObject.GetComponent<RawImage>().enabled = false;
+
+    }
 
     [ClientRpc]
     public void rpcPlayAudio(CharacterEnum characterEnum, AnimationEnum animationEnum){

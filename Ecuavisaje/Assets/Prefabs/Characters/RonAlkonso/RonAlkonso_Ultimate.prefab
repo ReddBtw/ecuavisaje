@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 6412731492178982426}
   - component: {fileID: 6412731492178982424}
   - component: {fileID: 919132148056963037}
+  - component: {fileID: 2729480848596746938}
   m_Layer: 0
   m_Name: RonAlkonso_Ultimate
   m_TagString: Untagged
@@ -182,6 +183,22 @@ MonoBehaviour:
   visible: 0
   m_AssetId: f2e3189eb135910f6b8adedda69d4635
   hasSpawned: 0
+--- !u!114 &2729480848596746938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6070835259615005517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65fadaa81a0f0185982f9daa1d97d86d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  impulse: 200
+  particleSystemExplosion: {fileID: 1211732771095700423, guid: e9cae523919ae7dce9e8a87d0051f832, type: 3}
 --- !u!1001 &4451303708926841357
 PrefabInstance:
   m_ObjectHideFlags: 0
