@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.deltation.toon-shader": "https://github.com/Delt06/urp-toon-shader.git?path=Packages/com.deltation.toon-shader",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.cinemachine": "2.6.11",
     "com.unity.collab-proxy": "1.15.12",
