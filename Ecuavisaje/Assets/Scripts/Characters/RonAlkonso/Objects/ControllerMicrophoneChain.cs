@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
+[RequireComponent(typeof(BoxCollider))]
+[RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(NetworkAnimator))]
 public class ControllerMicrophoneChain : SkillObject
 {
     [SerializeField] float forcePull = 3f;
