@@ -7,11 +7,14 @@ public class CambioDeEscena : MonoBehaviour
 {
     public GameObject personaje;
     public Transform puntoInicial;
+    public Camera camera = new Camera();
     private void Start()
     {
         personaje = GameObject.FindGameObjectWithTag("Player");
         puntoInicial = GameObject.FindGameObjectWithTag("PuntoInicial").transform;
+        AddCameraPlayer();
         MoverAlPuntoInicial();
+        EditarComponentes();
     }
 
     private void MoverAlPuntoInicial()
@@ -27,7 +30,7 @@ public class CambioDeEscena : MonoBehaviour
 
     public void TestCambioDeEscena()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.P))
         {
             if (SceneManager.GetActiveScene().name == "SelectCharacter")
             {
@@ -40,6 +43,22 @@ public class CambioDeEscena : MonoBehaviour
                 SceneManager.LoadScene("SelectCharacter");
             }
         }
+    }
+
+    public void AddCameraPlayer()
+    {
+        GameObject newCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        newCamera.transform.parent = personaje.transform;
+        newCamera.transform.localPosition = new Vector3(0, 2, -5);
+        newCamera.transform.localEulerAngles = new Vector3(10, 0, 0);
+    }
+
+    public void EditarComponentes()
+    {
+        //Se carga desplazamiento
+        personaje.AddComponent(typeof(SurfaceDisplacement));
+        //Cargar animaciones
+        /* Destroy(personaje.GetComponent<Animator>()); */
     }
 }
 
