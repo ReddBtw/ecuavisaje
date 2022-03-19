@@ -9,7 +9,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Debug.Log("Iniciando el juego");
-        Debug.Log(personajes.Length); foreach (GameObject personaje in personajes)
+        Debug.Log(personajes.Length);
+        foreach (GameObject personaje in personajes)
         {
             personaje.gameObject.SetActive(true);
             Debug.Log("Personaje Activado: " + personaje.name);

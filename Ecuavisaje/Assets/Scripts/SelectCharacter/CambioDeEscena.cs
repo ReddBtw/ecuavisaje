@@ -5,13 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class CambioDeEscena : MonoBehaviour
 {
-    public GameObject personaje;
+    public GameObject personaje, enemy;
     public Transform puntoInicial;
-    public Camera camera = new Camera();
+    public Vector3 cameraStart;
     private void Start()
     {
         personaje = GameObject.FindGameObjectWithTag("Player");
+        enemy.gameObject.SetActive(true);
         puntoInicial = GameObject.FindGameObjectWithTag("PuntoInicial").transform;
+        cameraStart = GameObject.FindGameObjectWithTag("CameraStart").transform.position;
         AddCameraPlayer();
         MoverAlPuntoInicial();
         EditarComponentes();
@@ -30,7 +32,7 @@ public class CambioDeEscena : MonoBehaviour
 
     public void TestCambioDeEscena()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Return))
         {
             if (SceneManager.GetActiveScene().name == "SelectCharacter")
             {
@@ -44,13 +46,26 @@ public class CambioDeEscena : MonoBehaviour
             }
         }
     }
+    /*  private void AddEnemy()
+     {
+         GameObject enemy = GameObject.FindGameObjectWithTag("Enemy");
+         enemy.gameObject.SetActive(true);
+     } */
 
     public void AddCameraPlayer()
     {
+        //Agregar cámara al personaje
         GameObject newCamera = GameObject.FindGameObjectWithTag("MainCamera");
         newCamera.transform.parent = personaje.transform;
-        newCamera.transform.localPosition = new Vector3(0, 2, -5);
-        newCamera.transform.localEulerAngles = new Vector3(10, 0, 0);
+        //Escala del personaje
+        Vector3 escala = personaje.transform.lossyScale;
+        newCamera.transform.localPosition = new Vector3(0 / escala.x, 7 / escala.y, -10 / escala.z);
+        newCamera.transform.localEulerAngles = new Vector3(7, 0, 0);
+        //Agregar luz
+        GameObject lightPlayer = GameObject.Find("Directional Light");
+        lightPlayer.transform.parent = newCamera.transform;
+        lightPlayer.transform.localPosition = new Vector3(0 / escala.x, 5 / escala.y, -3 / escala.z);
+        lightPlayer.transform.localEulerAngles = new Vector3(20, 0, 0);
     }
 
     public void EditarComponentes()
@@ -58,7 +73,14 @@ public class CambioDeEscena : MonoBehaviour
         //Se carga desplazamiento
         personaje.AddComponent(typeof(SurfaceDisplacement));
         //Cargar animaciones
-        /* Destroy(personaje.GetComponent<Animator>()); */
+        Animator animator = personaje.GetComponent<Animator>();
+        animator.runtimeAnimatorController = Resources.Load("SurfaceDesplacement") as RuntimeAnimatorController;
+        //Encontrar los pies para activar eventos de salto
+        foreach (GameObject foot in GameObject.FindGameObjectsWithTag("Foot"))
+        {
+            foot.AddComponent(typeof(LogicFeet));
+        }
+        Destroy(personaje.GetComponent<WaitSelection>());
     }
 }
 

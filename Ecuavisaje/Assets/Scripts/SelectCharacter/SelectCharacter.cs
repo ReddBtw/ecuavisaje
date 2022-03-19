@@ -39,15 +39,12 @@ public class SelectCharacter : MonoBehaviour
             //Actualizo el ángulo de giro
             target_Rot -= new Vector3(0, 360 / totalCharacters, 0);
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Return))
         {
-            Debug.Log("---------------Tecla: Espacio---------------");
-            Debug.Log("closest: " + closest);
             if (closest != null)
             {
                 closest.tag = "Player";
                 GameObject player = GameObject.FindGameObjectWithTag("Player");
-                Debug.Log("Seleccionando personaje: " + player.name);
                 DontDestroyOnLoad(player);
                 SceneManager.LoadScene("PrimeraEscena");
             }

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class SurfaceDisplacement : MonoBehaviour
 {
-    public float velocidad_desplazamiento = 5f;
-    public float velocidad_rotacion = 100f;
+    public float velocidad_desplazamiento;
+    public float velocidad_rotacion = 80f;
     private Animator animator;
     public Rigidbody rb;
     /* Variables para reconocer si el personaje se mueve en planos X e Y */
@@ -29,8 +29,9 @@ public class SurfaceDisplacement : MonoBehaviour
 
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        fuerzaSalto = 5f;
-        puedeSaltar = false;
+        velocidad_desplazamiento = 8f;
+        fuerzaSalto = 10f;
+        puedeSaltar = true;
         //Agachado
         velocidadInicial = velocidad_desplazamiento;
         velocidadAgachado = velocidad_desplazamiento / 2;
@@ -40,11 +41,11 @@ public class SurfaceDisplacement : MonoBehaviour
     void FixedUpdate()
     {
         //Ataque con puño
-    /*   if (!estoyAtacado)
-        {
-            transform.Rotate(0, x * Time.deltaTime * velocidad_rotacion, 0);
-            transform.Translate(0, 0, y * Time.deltaTime * velocidad_desplazamiento);
-        } */
+        /*   if (!estoyAtacado)
+            {
+                transform.Rotate(0, x * Time.deltaTime * velocidad_rotacion, 0);
+                transform.Translate(0, 0, y * Time.deltaTime * velocidad_desplazamiento);
+            } */
         /* Comando para realizar desplazamientos */
         transform.Rotate(0, x * Time.deltaTime * velocidad_rotacion, 0);
         transform.Translate(0, 0, y * Time.deltaTime * velocidad_desplazamiento);
@@ -62,7 +63,7 @@ public class SurfaceDisplacement : MonoBehaviour
         y = Input.GetAxis("Vertical");
         animator.SetFloat("VelX", x);
         animator.SetFloat("VelY", y);
-        
+
         /* Cuando activar el ataque */
         /* if (Input.GetMouseButtonDown(0) && puedeSaltar && !estoyAtacado)
         {
@@ -71,7 +72,7 @@ public class SurfaceDisplacement : MonoBehaviour
             estoyAtacado = true;
         }
         */
-        
+
         //Control de salto de la animacion
         if (puedeSaltar)
         {
@@ -80,7 +81,7 @@ public class SurfaceDisplacement : MonoBehaviour
                 rb.AddForce(new Vector3(0, fuerzaSalto, 0), ForceMode.Impulse);
                 animator.SetBool("Salte", true);
             }
-                
+
             /*  
             if (!estoyAtacado)
             {
@@ -103,27 +104,27 @@ public class SurfaceDisplacement : MonoBehaviour
         {
             EstoyCayendo();
         }
-    /*  else
-        {
-            EstoyCayendo();
-        } */
+        /*  else
+            {
+                EstoyCayendo();
+            } */
     }
     void EstoyCayendo()
     {
         animator.SetBool("TocarSuelo", false);
         animator.SetBool("Salte", false);
     }
-/* 
-    public void DejeDeAtacar()
-    {
-        estoyAtacado = false;
-    }
-    public void AvanzaSolo()
-    {
-        avanzaSolo = true;
-    }
-    public void DejaDeAvanzar()
-    {
-        avanzaSolo = false;
-    } */
+    /* 
+        public void DejeDeAtacar()
+        {
+            estoyAtacado = false;
+        }
+        public void AvanzaSolo()
+        {
+            avanzaSolo = true;
+        }
+        public void DejaDeAvanzar()
+        {
+            avanzaSolo = false;
+        } */
 }
