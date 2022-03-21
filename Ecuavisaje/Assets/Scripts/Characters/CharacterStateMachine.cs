@@ -130,7 +130,6 @@ public class CharacterStateMachine : NetworkBehaviour
         this.animator = this.GetComponent<Animator>();
         this.cutSceneController = GameObject.FindObjectOfType<CutSceneController>();
 
-        if(!hasAuthority) return;
 
         this.characters = UtilsResources.getScriptableObjectsCharacters();
 
@@ -146,6 +145,9 @@ public class CharacterStateMachine : NetworkBehaviour
         this.side = this.side_last;
         
         this.groundMask = 1 << LayerMask.NameToLayer("Ground");
+
+
+        if(!hasAuthority) return;
 
         switch (this.characterEnum)
         {

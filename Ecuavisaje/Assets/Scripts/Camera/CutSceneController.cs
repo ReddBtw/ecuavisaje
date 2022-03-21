@@ -66,6 +66,30 @@ public class CutSceneController : NetworkBehaviour
         // this.rpcTest("STOP ANIMATION");
     }
 
+    [ClientRpc]
+    public void rpcShake(CameraVirtualName cameraVirtualName, float amount){
+
+
+        switch (cameraVirtualName)
+        {
+            case CameraVirtualName.main:
+                CinemachineBasicMultiChannelPerlin basicMultiChannelPerlin = this.main.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+                basicMultiChannelPerlin.m_AmplitudeGain = amount;
+                break;
+
+            case CameraVirtualName.camera1:
+            
+                break;
+            case CameraVirtualName.camera2:
+            
+                break;
+            default:
+                break;
+        }
+
+        
+    }
+
     void handleCameraVirtualCurrent(CameraVirtualName valueOld, CameraVirtualName valueNew){
         this.cameraVirtualCurrent = valueNew;
         switch (valueNew)

@@ -72,10 +72,12 @@ public class CharacterCommandGiver : NetworkBehaviour
         int directionLooking
     ){
         GameObject instantiateSpecial = Instantiate(skill.gameObjectPrefab, prefabPosition, prefabRotation);
-        instantiateSpecial.GetComponent<SkillObject>().ignoreCollider = this.GetComponent<CapsuleCollider>();
-        instantiateSpecial.GetComponent<SkillObject>().damage = skill.damage;
-        instantiateSpecial.GetComponent<SkillObject>().directionLooking = directionLooking;
-        instantiateSpecial.GetComponent<SkillObject>().attackRange = skill.attackRange;
+        SkillObject skillObject = instantiateSpecial.GetComponent<SkillObject>();
+        skillObject.ignoreCollider = this.GetComponent<CapsuleCollider>();
+        skillObject.damage = skill.damage;
+        skillObject.directionLooking = directionLooking;
+        skillObject.attackRange = skill.attackRange;
+        skillObject.parentServer = this.gameObject;
         NetworkServer.Spawn(instantiateSpecial, this.connectionToClient);
     }
 

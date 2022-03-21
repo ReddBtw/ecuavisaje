@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(BoxCollider))]
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(NetworkAnimator))]
 public class ControllerMicrophoneChain : SkillObject
 {
     [SerializeField] float forcePull = 3f;
@@ -16,7 +18,7 @@ public class ControllerMicrophoneChain : SkillObject
     {
 
         base.OnStartServer();
-        this.animator = this.GetComponent<Animator>();
+        this.animator = this.objectMain.GetComponent<Animator>();
         this.boxCollider = this.GetComponent<BoxCollider>();
         StartCoroutine(this.animateForward());
         
@@ -32,7 +34,7 @@ public class ControllerMicrophoneChain : SkillObject
     }
 
     void destroyMe(){
-        NetworkServer.Destroy(this.gameObject);
+        // NetworkServer.Destroy(this.gameObject);
     }
 
 

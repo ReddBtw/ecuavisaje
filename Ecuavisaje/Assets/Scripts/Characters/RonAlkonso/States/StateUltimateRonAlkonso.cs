@@ -36,7 +36,7 @@ public class StateUltimateRonAlkonso : State
         CutSceneController cutSceneController = context.cutSceneController;
 
 
-        context.characterCommandGiver.rpcTest("SCENE1");
+        // context.characterCommandGiver.rpcTest("SCENE1");
         cutSceneController.setCamera(CameraVirtualName.camera1);
 
         // this.rpcTest("BEGIN ANIMATION");
@@ -54,11 +54,11 @@ public class StateUltimateRonAlkonso : State
             cutSceneController.camera1.transform.position = Vector3.Lerp(cutSceneController.camera1.transform.position, position1, velocityZoom * Time.deltaTime);
             yield return null;
         }
-        context.characterCommandGiver.rpcTest("SCENE2");
+        // context.characterCommandGiver.rpcTest("SCENE2");
         yield return new WaitForSeconds(0.5f);
         cutSceneController.setCamera(CameraVirtualName.camera2);
         context.animator.Play(AnimationEnum.Punch1.ToString());
-        context.characterCommandGiver.rpcTest("SCENE_ULTIMATE");
+        // context.characterCommandGiver.rpcTest("SCENE_ULTIMATE");
         yield return new WaitForSeconds(0.5f);
         cutSceneController.setCamera(CameraVirtualName.main);
         context.animator.Play(AnimationEnum.Kick1.ToString());
@@ -66,6 +66,10 @@ public class StateUltimateRonAlkonso : State
 
         int directionLooking = (context.transform.rotation.eulerAngles.y > 180)? -1: 1;
         // to left=-1, to right=1
+
+
+        // context.characterCommandGiver.rpcTest("CL: " + context.characters.Count + ", context.getCharacterEnum(): " + context.getCharacterEnum());
+
 
         foreach (Character character in context.characters)
         {   
@@ -90,16 +94,16 @@ public class StateUltimateRonAlkonso : State
                     ultimate.gameObjectPrefab.transform.rotation.eulerAngles.z
 
                 );
-                CinemachineBasicMultiChannelPerlin basicMultiChannelPerlin = cutSceneController.main.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-                basicMultiChannelPerlin.m_AmplitudeGain = 5;
+
+                cutSceneController.rpcShake(CameraVirtualName.main, 5);
                 context.characterCommandGiver.instantiateSkillObject(ultimate, vectorPosition, rotation, directionLooking);
                 yield return new WaitForSeconds(3f);
-                basicMultiChannelPerlin.m_AmplitudeGain = 0;
+                cutSceneController.rpcShake(CameraVirtualName.main, 0);
                 break;
             }
             
         }
-        context.characterCommandGiver.rpcTest("SCENE_END");
+        // context.characterCommandGiver.rpcTest("SCENE_END");
 
     }
 
@@ -119,7 +123,7 @@ public class StateUltimateRonAlkonso : State
     public override void checkSwitchStates()
     {
         if(!this.context.isAttacking){
-            Debug.Log("SWITCHING FROM ULTIMATE TO " + this.context.isMoving);
+            // Debug.Log("SWITCHING FROM ULTIMATE TO " + this.context.isMoving);
             if(this.context.isMoving){
                 this.switchState(this.factory.createWalk());
             }
