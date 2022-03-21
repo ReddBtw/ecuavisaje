@@ -5,7 +5,6 @@ using Mirror;
 
 [RequireComponent(typeof(BoxCollider))]
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(NetworkAnimator))]
 public class ControllerMicrophoneChain : SkillObject
 {
@@ -19,7 +18,7 @@ public class ControllerMicrophoneChain : SkillObject
     {
 
         base.OnStartServer();
-        this.animator = this.GetComponent<Animator>();
+        this.animator = this.objectMain.GetComponent<Animator>();
         this.boxCollider = this.GetComponent<BoxCollider>();
         StartCoroutine(this.animateForward());
         
@@ -35,7 +34,7 @@ public class ControllerMicrophoneChain : SkillObject
     }
 
     void destroyMe(){
-        NetworkServer.Destroy(this.gameObject);
+        // NetworkServer.Destroy(this.gameObject);
     }
 
 

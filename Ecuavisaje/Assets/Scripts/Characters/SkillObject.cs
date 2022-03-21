@@ -7,10 +7,11 @@ public class SkillObject: NetworkBehaviour{
     public float damage {get;set;}
     public Collider ignoreCollider {get;set;}
     public float attackRange {get;set;}
-
     public int directionLooking {get;set;} // to left=-1, to right=1
 
+    [SerializeField] public GameObject objectMain;
 
+    public GameObject parentServer {get;set;}
     
 
 }

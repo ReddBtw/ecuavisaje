@@ -89,7 +89,7 @@ public class NetworkPlayer : NetworkBehaviour
                 this.cmdSetCharacter(CharacterEnum.RonAlkonso);
             }
             else{
-                this.cmdSetCharacter(CharacterEnum.Lasso);
+                this.cmdSetCharacter(CharacterEnum.RonAlkonso);
 
             }
         

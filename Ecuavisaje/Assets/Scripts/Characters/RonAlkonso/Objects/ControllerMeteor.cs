@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
+
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(BoxCollider))]
 public class ControllerMeteor : SkillObject
 {
     private bool collided = false;
@@ -50,6 +53,7 @@ public class ControllerMeteor : SkillObject
             gameObjectExplosion = Instantiate(this.particleSystemExplosion, this.transform.position, this.transform.rotation);
             NetworkServer.Spawn(gameObjectExplosion);
             StartCoroutine(destroyMeteor());
+            Debug.Log("Spawn explosion");
         }
         
 

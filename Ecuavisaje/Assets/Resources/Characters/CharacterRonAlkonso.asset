@@ -25,21 +25,21 @@ MonoBehaviour:
     startPositionOffset: {x: 0, y: 0, z: 0}
   special1:
     skillType: 1
-    gameObjectPrefab: {fileID: 8716425560517441340, guid: 24097c66091951f518aafd687715b94f, type: 3}
+    gameObjectPrefab: {fileID: 781656420209643177, guid: 10157986163c51412971ce7d06839a72, type: 3}
     audio: {fileID: 8300000, guid: bb4fe015486f8ee65921a7bb2b4565ef, type: 3}
     damage: 10
     attackRange: 0
     startPositionOffset: {x: 0, y: 0, z: 0}
   special2:
     skillType: 2
-    gameObjectPrefab: {fileID: 7896127331890715153, guid: c82af8dda639c03cdaf97b0adf6de59e, type: 3}
+    gameObjectPrefab: {fileID: 6390774521708179679, guid: af2e4667bccedf8d5b06fd70b9df55eb, type: 3}
     audio: {fileID: 8300000, guid: 4e159ae79119ccd2ab73ea1a54371833, type: 3}
     damage: 20
     attackRange: 8
-    startPositionOffset: {x: -3, y: 5, z: 0}
+    startPositionOffset: {x: -1, y: 7, z: 0}
   ultimate:
     skillType: 2
-    gameObjectPrefab: {fileID: 6070835259615005517, guid: f2e3189eb135910f6b8adedda69d4635, type: 3}
+    gameObjectPrefab: {fileID: 1782842472512419915, guid: c9829f4a6cecc3eb78399e8c875fe5d8, type: 3}
     audio: {fileID: 8300000, guid: aaafdd3e4fdc9c9619528e03909a49e4, type: 3}
     damage: 50
     attackRange: 0
