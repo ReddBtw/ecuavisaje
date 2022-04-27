@@ -41,6 +41,10 @@ public class StateGrounded : State
             this.context.isPressedJump = false;
             this.switchState(this.factory.createJump());
         }
+        else if(this.context.isPressedBend){
+            this.context.isPressedBend = false;
+            this.switchState(this.factory.createBend());
+        }
     }
 
     public override void exit() { }

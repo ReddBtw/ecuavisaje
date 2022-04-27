@@ -124,7 +124,7 @@ public class EcNetworkRoomManager : NetworkRoomManager
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnection conn, GameObject roomPlayer, GameObject gamePlayer)
     {
         NetworkPlayer player = gamePlayer.GetComponent<NetworkPlayer>();
-        player.setPlayer(players.Count);
+        // player.setPlayer(players.Count);
         players.Add(player);
         return true;
     }

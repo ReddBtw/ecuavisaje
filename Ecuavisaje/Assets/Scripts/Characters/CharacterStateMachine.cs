@@ -29,11 +29,11 @@ public class CharacterStateMachine : NetworkBehaviour
 
     public bool isGrounded = true;
     public bool isPressedJump = false;
-    public bool isPressedBend = false;
     public bool isPressedLeft = false;
     public bool isPressedRight = false;
     public bool isMoving = false;
     public bool isJumping = false;
+    public bool isBending = false;
     public bool isAttacking = false;
     public bool isPressedPunch1 = false;
     public bool isPressedPunch2 = false;
@@ -42,6 +42,9 @@ public class CharacterStateMachine : NetworkBehaviour
     public bool isActivatedSpecial2 = false;
     public bool isActivatedUltimate = false;
 
+
+
+ 
     
     public Animator animator {get;set;}
     public CharacterCommandGiver characterCommandGiver {get; set;}
@@ -59,7 +62,7 @@ public class CharacterStateMachine : NetworkBehaviour
     [SerializeField]
     public float speedWalk = 12f;
     [SerializeField]
-    public float forceJump = 400f;
+    public float velocityJump = 1f;
 
     #region GettersSetters
 
@@ -70,31 +73,42 @@ public class CharacterStateMachine : NetworkBehaviour
     #region Server and Client callbacks
     public override void OnStartServer(){
 
-        if(!NetworkServer.active) return;
-
-
         foreach(GameObject gameObjectPlayer in GameObject.FindGameObjectsWithTag("Player")){
             NetworkPlayer p = gameObjectPlayer.GetComponent<NetworkPlayer>();
             
-            this.player = p;
+            if(p.hasAuthority){
+                this.player = p;
+                Debug.Log($"Player in start server: auth={this.player.hasAuthority}, conn={this.player.connectionToClient}");
+            
+            }
+
             
         }
+
+
+        if(!NetworkServer.active) return;
+
+
+        
         
     }
 
     public override void OnStartClient()
     {
+
         if(!hasAuthority){
             // execute in others locally
-            this.gameObject.layer = LayerMask.NameToLayer("Enemy");
+            // this.gameObject.layer = LayerMask.NameToLayer("Enemy");
             return;
         }
 
-        this.gameObject.layer = LayerMask.NameToLayer("Ally");
 
         this.inputActions = new InputActions();
         this.inputActions.Player.Enable();
-        this.inputActions.Player.Jump.performed += this.jump;
+
+        this.inputActions.Player.Jump.performed += this.onJump;
+        this.inputActions.Player.Bend.performed += this.onBend;
+
         this.inputActions.Player.Punch1.performed += this.punch1;
         this.inputActions.Player.Punch2.performed += this.punch2;
         this.inputActions.Player.DebugSpecial1.performed += this.debugSpecial1;
@@ -102,6 +116,8 @@ public class CharacterStateMachine : NetworkBehaviour
         this.inputActions.Player.DebugUltimate.performed += this.debugUltimate;
 
         this.player = NetworkClient.connection.identity.GetComponent<NetworkPlayer>();
+
+        this.gameObject.layer = LayerMask.NameToLayer(this.player.team_layer);
 
         // Debug.Log("Net id: " + this.player.netId + ". Has: " + this.player.hasAuthority);
     }
@@ -111,7 +127,9 @@ public class CharacterStateMachine : NetworkBehaviour
         if(!hasAuthority) return;
 
         this.inputActions.Player.Disable();
-        this.inputActions.Player.Jump.performed -= this.jump;
+        this.inputActions.Player.Jump.performed -= this.onJump;
+        this.inputActions.Player.Bend.performed -= this.onBend;
+
         this.inputActions.Player.Punch1.performed -= this.punch1;
         this.inputActions.Player.Punch2.performed -= this.punch2;
         this.inputActions.Player.DebugSpecial1.performed -= this.debugSpecial1;
@@ -223,13 +241,6 @@ public class CharacterStateMachine : NetworkBehaviour
 
         this.isMoving = this.isPressedLeft || this.isPressedRight;
 
-        float bend = inputActions.Player.Bend.ReadValue<float>();
-        if(bend > 0){
-            this.isPressedBend = true;
-        }
-        else{
-            this.isPressedBend = false;
-        }
     }
 
 
@@ -246,13 +257,28 @@ public class CharacterStateMachine : NetworkBehaviour
     }
 
 
-    private void jump(InputAction.CallbackContext context){
+    private void onJump(InputAction.CallbackContext context){
         if(!hasAuthority) return;
+
+        // Debug.Log("PRESS JUMO: " + this.isPressedJump);
+        
         if(!this.isJumping){
 
-            this.isPressedJump = true;
+            this.isPressedJump = true; // context.ReadValueAsButton();
         }
+        
     }
+
+    private void onBend(InputAction.CallbackContext context){
+        if(!hasAuthority) return;
+        
+        if(!this.isBending && this.isGrounded){
+            this.isBending = true; // context.ReadValueAsButton();
+        }
+        
+    }
+
+    
 
     private void punch1(InputAction.CallbackContext context){
         if(!hasAuthority) return;

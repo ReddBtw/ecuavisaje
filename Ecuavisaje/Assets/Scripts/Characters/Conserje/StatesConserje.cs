@@ -46,7 +46,10 @@ public class StateFactoryConserje: StateFactory{
         return new StateConserjePunch1(this.stateMachine, this);
     }
 
-
+    public override State createBend()
+    {
+        throw new System.NotImplementedException();
+    }
 }
     
 #endregion

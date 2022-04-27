@@ -9,13 +9,16 @@ using UnityEngine.UI;
 
 public class NetworkPlayer : NetworkBehaviour
 {
-
+    public static int count_instantiated = 0;
     [SyncVar(hook = nameof(handleUpdateId))]
     public int id = -1;
     [SyncVar(hook = nameof(handleUpdateCharacterEnum))]
     public CharacterEnum characterEnum = CharacterEnum.None;
 
     public GameObject opponent {get; set;}
+
+    public string team_layer {get; set;}
+    public string team_enemy {get; set;}
 
 
     private List<Character> characters;
@@ -36,13 +39,39 @@ public class NetworkPlayer : NetworkBehaviour
 
     public override void OnStartServer()
     {
+        NetworkPlayer.count_instantiated += 1;
+        setPlayer(NetworkPlayer.count_instantiated);
         DontDestroyOnLoad(this.gameObject);
     }
     
     [Server]
     public void setPlayer(int index){
+        if(index < 0){
+            Debug.Log("Error setting player with index negative " + index);
+        }
+
         id = index;
         
+        this.setTeam(id);
+        
+        
+    }
+
+    private void setTeam(int num){
+
+        if(iamEven(num)){
+            this.team_layer = "Player2";
+            this.team_enemy = "Player1";
+        }
+        else{
+            this.team_layer = "Player1";
+            this.team_enemy = "Player2";
+        }
+        this.gameObject.layer = LayerMask.NameToLayer(this.team_layer);
+    }
+
+    private bool iamEven(int num){
+        return num % 2 == 0;
     }
 
     #endregion
@@ -96,8 +125,8 @@ public class NetworkPlayer : NetworkBehaviour
         }
         catch (Exception)
         {
-            // Debug.Log("Selecting default");
-        	this.cmdSetCharacter(CharacterEnum.RonAlkonso);
+            Debug.Log("Selecting default");
+        	this.cmdSetCharacter(CharacterEnum.Lasso);
         }
         
 
@@ -121,6 +150,7 @@ public class NetworkPlayer : NetworkBehaviour
     private void handleUpdateId(int oldValue, int newValue)
     {
         this.id = newValue;
+        this.setTeam(id);
     }
 
     [Client]

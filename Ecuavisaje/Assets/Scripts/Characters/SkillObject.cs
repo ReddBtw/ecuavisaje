@@ -12,6 +12,7 @@ public class SkillObject: NetworkBehaviour{
     [SerializeField] public GameObject objectMain;
 
     public GameObject parentServer {get;set;}
+    public CharacterStateMachine characterStateMachineServer {get;set;}
     
 
 }

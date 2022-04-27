@@ -11,12 +11,15 @@ public abstract class StateFactory
     }
     public abstract State createGrounded();
     public abstract State createJump();
+    public abstract State createBend();
     public abstract State createIdle();
     public abstract State createWalk();
     public abstract State createPunch();
     public abstract State createSpecial1();
     public abstract State createSpecial2();
     public abstract State createUltimate();
+
+
 
     
 }

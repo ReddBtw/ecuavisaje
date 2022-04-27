@@ -32,8 +32,14 @@ public class CharacterCommandGiver : NetworkBehaviour
 
 
     [Command]
-    public void cmdJump(float force){
-        this.rb.AddForce(new Vector3(0,force,0), ForceMode.Force);
+    public void cmdAddForce(Vector3 force, ForceMode mode){
+        this.rb.AddForce(force, mode);
+    }
+
+
+    [Command]
+    public void cmdSetVelocity(Vector3 velocity){
+        this.rb.velocity = velocity;
     }
 
     [Command]
@@ -78,6 +84,7 @@ public class CharacterCommandGiver : NetworkBehaviour
         skillObject.directionLooking = directionLooking;
         skillObject.attackRange = skill.attackRange;
         skillObject.parentServer = this.gameObject;
+        skillObject.characterStateMachineServer = this.characterStateMachine;
         NetworkServer.Spawn(instantiateSpecial, this.connectionToClient);
     }
 

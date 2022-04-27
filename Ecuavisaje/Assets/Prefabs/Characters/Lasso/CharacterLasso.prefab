@@ -2325,9 +2325,13 @@ MonoBehaviour:
   isAttacking: 0
   isPressedPunch1: 0
   isPressedPunch2: 0
+  isActivatedSpecial1: 0
+  isActivatedSpecial2: 0
+  isActivatedUltimate: 0
+  characters: []
   characterEnum: 1
   speedWalk: 10
-  forceJump: 600
+  velocityJump: 1000
 --- !u!82 &-82014230920191851
 AudioSource:
   m_ObjectHideFlags: 0
